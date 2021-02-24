@@ -2,7 +2,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import Main from './views/main';
 import Results from './views/results';
-import Snakes from './views/snakes';
 
 import Mugello from './assets/images/tracks/mugello2.png';
 
