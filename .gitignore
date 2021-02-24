@@ -1,0 +1,17 @@
+.idea/
+.vscode/
+public/
+node_modules/
+build
+.DS_Store
+*.tgz
+my-app*
+lerna-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.changelog
+.npm/
+yarn.lock
+.env.environment
+package-lock.json
