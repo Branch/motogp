@@ -3,6 +3,10 @@ import Dropdown from '../components/dropdown';
 
 function Results(props) {
 
+    const [activeYear, assignYear] = useState({
+        year: new Date().getFullYear(),
+        dropdownOpen: false
+    })
     const [yearsInFilter, assignYears] = useState([])
     const [resultsTable, setResultsTable] = useState([])
 
@@ -13,9 +17,8 @@ function Results(props) {
             years.push(i)
         }
         let elements = years.map((year) =>
-            <div>{year}</div>
+            <div onClick={() => assignYear({year:year, dropdownOpen: false})}>{year}</div>
         )
-
         assignYears(elements)
     }
 
@@ -101,8 +104,11 @@ function Results(props) {
         <div className={'index-main-results-inner container'}>
             <h2>
             <Dropdown
-                onDropdownClick = {() => {console.log('test')}}
+                class = {'numbers'}
+                activeItem={activeYear.year}
+                onActiveClick = {() => assignYear({year:activeYear.year, dropdownOpen: activeYear.dropdownOpen !== true})}
                 listItems = {yearsInFilter}
+                isOpen={activeYear.dropdownOpen}
             />
             results</h2>
             <div className={'index-main-results-inner__filters'}>

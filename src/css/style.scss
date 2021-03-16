@@ -33,6 +33,52 @@ h6,
   font-family: 'Roboto', sans-serif;
 }
 
+.dropdown {
+  &__container {
+    display: inline-block;
+
+    &__active {
+      position: relative;
+      cursor: pointer;
+      padding-right: 4rem;
+      transition: all 0.2s linear;
+
+      &:hover {
+        transition: all 0.2s linear;
+        color: $orange;
+
+        * {
+          transition: all 0.2s linear;
+          color: $orange !important;
+        }
+      }
+
+      svg {
+        top: 0;
+        right: 1.8rem;
+        width: 2rem !important;
+        z-index: 999 !important;
+      }
+    }
+
+    &__numbers {
+      height: 0;
+      position: absolute;
+      overflow: hidden;
+
+      div {
+        cursor: pointer;
+      }
+
+      &.open {
+        height: 10rem;
+        overflow-y: auto;
+        background-color: $beige;
+      }
+    }
+  }
+}
+
 span.highlight {
   color: $orange;
   font-weight: bold;
