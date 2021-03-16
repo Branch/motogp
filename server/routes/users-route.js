@@ -1,5 +1,5 @@
 // Import express
-const express = require('express')
+const express = require('express');
 // Import users controller
 const usersController = require('./../controllers/users-controller.js')
 // Create express router

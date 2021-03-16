@@ -11,7 +11,6 @@ const fetch = require('node-fetch');
 
 // Import routes
 const homeRouter = require('./routes/home-route')
-const usersRouter = require('./routes/users-route')
 const motogpRouter = require('./routes/motogp-route')
 
 // Setup default port
@@ -35,12 +34,15 @@ if (process.env.NODE_ENV && process.env.NODE_ENV !== 'development') {
 }
 // Implement route for '/api' endpoint
 app.use('/api', homeRouter)
+app.use('/motogp', motogpRouter)
 
 // Implement route for '/users' endpoint
 // ! Note:
 // '/users' will prefix all post routes
 // with '/users' => '/all' will become '/users/all'
-app.use('/users', usersRouter)
+
+/*
+app.use('/users', usersRouter)*/
 // Implement route for errors
 app.use((err, req, res, next) => {
     console.error(err.stack)
@@ -48,10 +50,10 @@ app.use((err, req, res, next) => {
 })
 
 
-app.use('/motogp', motogpRouter)
+//app.use('/motogp', motogpRouter)
 
 
-
+/*
 
 app.get(`/results`, (req,res) => {
     let html = window.document.createElement('html');
@@ -65,7 +67,7 @@ app.get(`/results`, (req,res) => {
 
         });
     return {1:'hejsan'};
-});
+});*/
 
 
 // Start express app

@@ -10,20 +10,12 @@ function App() {
 
     const [menuClass, setMenuClass] = useState('')
 
-
-    // Prepare state hook for welcome message
-    const [welcomeMessage, setWelcomeMessage] = useState('')
-    // Prepare state hook for users list
-
-    // It specifies the shape of usersList state
-    const [usersList, setUsersList] = useState([])
     // Create async function for fetching welcome message
     const fetchMessage = async () => {
         // Use Fetch API to fetch '/api' endpoint
         const message = await fetch('/api')
             .then(res => res.text()) // process incoming data
         // Update welcomeMessage state
-        setWelcomeMessage(message)
     }
     // Use useEffect to call fetchMessage() on initial render
     useEffect(() => {
