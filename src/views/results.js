@@ -1,10 +1,23 @@
 import React, {useEffect, useState} from 'react';
+import Dropdown from '../components/dropdown';
 
 function Results(props) {
 
-    const [yearsList, setYears] = useState([])
+    const [yearsInFilter, assignYears] = useState([])
     const [resultsTable, setResultsTable] = useState([])
 
+    const setYears = async () => {
+        let years = [];
+
+        for(let i = new Date().getFullYear(); i >= 2015; i--) {
+            years.push(i)
+        }
+        let elements = years.map((year) =>
+            <div>{year}</div>
+        )
+
+        assignYears(elements)
+    }
 
     // Create async function for fetching users list
     const fetchResults = async () => {
@@ -67,7 +80,7 @@ function Results(props) {
                     newResultsTable += `<td>${diffToLeader}</td><td>${diffToAbove}</td></tr>`;
                     rowCounter++;
                 }
-                setResultsTable(resultsTable = newResultsTable)
+                setResultsTable(newResultsTable)
 
             })
     }
@@ -76,6 +89,7 @@ function Results(props) {
 
     // Use useEffect to call fetchMessage() on initial render
     useEffect(() => {
+        setYears()
         fetchResults()
     }, [])
 
@@ -85,7 +99,12 @@ function Results(props) {
 
     return <div className={'index-main-results'} ref={props.ref}>
         <div className={'index-main-results-inner container'}>
-            <h2>2021 results</h2>
+            <h2>
+            <Dropdown
+                onDropdownClick = {() => {console.log('test')}}
+                listItems = {yearsInFilter}
+            />
+            results</h2>
             <div className={'index-main-results-inner__filters'}>
                 <div className={'index-main-results-inner__filters__filter active'}>Rider standings</div>
                 <div className={'index-main-results-inner__filters__filter'}>Mugello race results</div>
