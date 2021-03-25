@@ -406,5 +406,38 @@ span.highlight {
       }
     }
   }
+
+  &-about {
+    background-color: $orange;
+    color: $beige;
+
+    &-inner {
+      padding: 10rem 0;
+      text-align: center;
+
+      h2 {
+        font-size: 5rem;
+        margin: 0;
+        padding: 0;
+        font-weight: 900;
+      }
+    }
+    &-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        font-size: 2rem;
+        color: $beige;
+        margin: 0 1rem;
+
+        &:hover {
+          color: $green-dark;
+        }
+      }
+    }
+  }
+
 }
 

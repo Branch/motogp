@@ -2,6 +2,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import Main from './views/main';
 import Results from './views/results';
+import About from './views/about';
 
 import Mugello from './assets/images/tracks/mugello2.png';
 
@@ -42,6 +43,7 @@ function App() {
             <Results
                 ref={resultsRef}
             />
+            <About />
         </div>
     )
 }
