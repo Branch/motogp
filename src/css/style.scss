@@ -62,7 +62,10 @@ h6,
     }
 
     &__numbers,
-    &__races {
+    &__races,
+    &__categories,
+    &__sessions,
+    &__type {
       height: 0;
       position: absolute;
       overflow: hidden;
