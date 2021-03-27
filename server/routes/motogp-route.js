@@ -6,5 +6,7 @@ const motogpController = require('./../controllers/motogp-controller.js')
 const router = express.Router()
 
 router.get('/standings/rider', motogpController.getLatest)
+router.get('/races', motogpController.getRaces)
+
 // Export router
 module.exports = router
