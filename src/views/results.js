@@ -7,8 +7,15 @@ function Results(props) {
         year: new Date().getFullYear(),
         dropdownOpen: false
     })
+    const [activeRace, assignRace] = useState({
+        race: null,
+        dropdownOpen: false
+    })
     const [yearsInFilter, assignYears] = useState([])
+    const [racesInFilter, assignRaces] = useState([])
     const [resultsTable, setResultsTable] = useState([])
+    const [tableHeader, setTableHeader] = useState([])
+    const [races, setRaces] = useState([])
 
     const setYears = async () => {
         let years = [];
@@ -17,14 +24,61 @@ function Results(props) {
             years.push(i)
         }
         let elements = years.map((year) =>
-            <div onClick={() => assignYear({year:year, dropdownOpen: false})}>{year}</div>
+            <div onClick={() => yearClick(year)}>{year}</div>
         )
         assignYears(elements)
     }
 
+    const fetchRaces  = async (year, setDefault = false) => {
+        fetch(`/motogp/races?` + new URLSearchParams({
+            year: year ? year : new Date().getFullYear()
+        }))
+            .then(res => res.json()) // Process the incoming data
+            .then(json => {
+                let races = JSON.parse(json.data)
+
+                let raceElements = []
+                let firstRace = '';
+
+                let first = true;
+                for (let key of Object.keys(races)) {
+                    if(first) {
+                        firstRace = races[key].shortname;
+                    }
+
+                    raceElements.push(races[key].shortname)
+                    first = false;
+                }
+
+                let elements = raceElements.map((race) =>
+                    <div onClick={() => raceClick(race)}>{race}</div>
+                )
+                assignRaces(elements)
+
+                // Set active race when loading view
+                if(setDefault) {
+                    raceClick(firstRace)
+                }
+
+            })
+    }
+
+    const yearClick = async (year) => {
+        assignYear({year:year, dropdownOpen: false})
+        fetchRaces(year)
+    }
+
+    const raceClick = async (race) => {
+        assignRace({race:race, dropdownOpen: false})
+    }
+
     // Create async function for fetching users list
     const fetchResults = async () => {
-        fetch('/motogp/standings/rider')
+        console.log(activeRace.race)
+        fetch(`/motogp/standings/rider?` + new URLSearchParams({
+                year: activeYear.year,
+                race: activeRace.race
+            }))
             .then(res => res.json()) // Process the incoming data
             .then(json => {
                 let html = window.document.createElement('html');
@@ -83,8 +137,17 @@ function Results(props) {
                     newResultsTable += `<td>${diffToLeader}</td><td>${diffToAbove}</td></tr>`;
                     rowCounter++;
                 }
+                let tableHeader = '<tr>\n' +
+                    '                        <th></th>\n' +
+                    '                        <th>Rider</th>\n' +
+                    '                        <th>Team</th>\n' +
+                    '                        <th>Nationality</th>\n' +
+                    '                        <th>Points</th>\n' +
+                    '                        <th>Diff to #1</th>\n' +
+                    '                        <th>Diff to rider ahead</th>\n' +
+                    '                    </tr>';
                 setResultsTable(newResultsTable)
-
+                setTableHeader(tableHeader)
             })
     }
 
@@ -93,7 +156,7 @@ function Results(props) {
     // Use useEffect to call fetchMessage() on initial render
     useEffect(() => {
         setYears()
-        fetchResults()
+        fetchRaces(new Date().getFullYear(), true)
     }, [])
 
 
@@ -113,20 +176,19 @@ function Results(props) {
             results</h2>
             <div className={'index-main-results-inner__filters'}>
                 <div className={'index-main-results-inner__filters__filter active'}>Rider standings</div>
-                <div className={'index-main-results-inner__filters__filter'}>Mugello race results</div>
+                <div className={'index-main-results-inner__filters__filter'}>
+                    <Dropdown
+                        class = {'races'}
+                        activeItem={activeRace.race}
+                        onActiveClick = {() => assignRace({race:activeRace.race, dropdownOpen: activeRace.dropdownOpen !== true})}
+                        listItems = {racesInFilter}
+                        isOpen={activeRace.dropdownOpen}
+                    />
+                    race results</div>
             </div>
-            <button>Go</button>
+            <button onClick={fetchResults}>Go</button>
             <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Rider</th>
-                        <th>Team</th>
-                        <th>Nationality</th>
-                        <th>Points</th>
-                        <th>Diff to #1</th>
-                        <th>Diff to rider ahead</th>
-                    </tr>
+                <thead dangerouslySetInnerHTML={{__html: tableHeader}}>
                 </thead>
                 <tbody dangerouslySetInnerHTML={{__html: resultsTable}}></tbody>
             </table>

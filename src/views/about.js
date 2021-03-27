@@ -10,7 +10,7 @@ function About() {
                 About
             </h2>
             <p>
-                This site is meant to be an improvement of the results page that you can find on <a href={'https://www.motogp.com/en/Results+Statistics'} target={'_blank'}>motogp.com</a>.
+                This site is meant to be an improvement of the results page that you can find on <a href={'https://www.motogp.com/en/Results+Statistics'} target={'_blank'}>motogp.com.</a>
             </p>
             <p>
                 This site is a hobby of mine and is not affiliated with MotoGP / Dorna.
