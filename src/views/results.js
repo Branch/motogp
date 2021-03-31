@@ -41,7 +41,7 @@ function Results(props) {
     const setYears = async () => {
         let years = [];
 
-        for(let i = new Date().getFullYear(); i >= 2015; i--) {
+        for(let i = new Date().getFullYear(); i >= 2012; i--) {
             years.push(i)
         }
         let elements = years.map((year) =>
