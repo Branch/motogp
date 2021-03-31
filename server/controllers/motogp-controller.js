@@ -60,6 +60,13 @@ exports.getSession = async (req, res) => {
     let category = req.query.category;
     let session = req.query.session;
 
+    // Strange motogp stuff
+    if(session === 'RACE') {
+        session = 'rac';
+    } else if (session === 'RACE2') {
+        session = 'rac2';
+    }
+
     let latestPath = `https://www.motogp.com/en/ajax/results/parse/${year}/${race}/${category}/${session}`;
 
     fetch(latestPath)
