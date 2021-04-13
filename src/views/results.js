@@ -9,6 +9,7 @@ function Results(props) {
     })
     const [activeRace, assignRace] = useState({
         race: '',
+        raceName: '',
         dropdownOpen: false
     })
 
@@ -60,24 +61,30 @@ function Results(props) {
 
         let raceElements = []
         let firstRace = '';
+        let firstRaceName = '';
 
         let first = true;
+        let race = {}
         for (let key of Object.keys(races)) {
+            race = {}
             if(first) {
                 firstRace = races[key].shortname;
+                firstRaceName = races[key].title;
             }
-            raceElements.push(races[key].shortname)
+            race.race = races[key].shortname
+            race.raceName = races[key].title
+            raceElements.push(race)
             first = false;
         }
 
         let elements = raceElements.map((race) =>
-            <div onClick={() => raceClick(race)}>{race}</div>
+            <div onClick={() => raceClick(race.race, race.raceName)}>{race.raceName}</div>
         )
         assignRaces(elements)
 
         // Set active race when loading view
         if(setDefault) {
-            assignRace({race:firstRace, dropdownOpen: false})
+            assignRace({race:firstRace, raceName:firstRaceName, dropdownOpen: false})
         }
     }
 
@@ -145,8 +152,8 @@ function Results(props) {
         assignYear({year:year, dropdownOpen: false})
     }
 
-    const raceClick = async (race) => {
-        assignRace({race:race, dropdownOpen: false})
+    const raceClick = async (race, raceName) => {
+        assignRace({race:race,raceName: raceName, dropdownOpen: false})
     }
 
     const categoryClick = async (category) => {
@@ -343,8 +350,8 @@ function Results(props) {
                 <div className={'index-main-results-inner__filters__filter active'}>
                     <Dropdown
                         class = {'races'}
-                        activeItem={activeRace.race}
-                        onActiveClick = {() => assignRace({race:activeRace.race, dropdownOpen: activeRace.dropdownOpen !== true})}
+                        activeItem={activeRace.raceName}
+                        onActiveClick = {() => assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: activeRace.dropdownOpen !== true})}
                         listItems = {racesInFilter}
                         isOpen={activeRace.dropdownOpen}
                     />
