@@ -255,10 +255,6 @@ function Results(props) {
         let resultsTable = html.getElementsByTagName('table')[0]
         let rowCounter = 0;
         let newResultsTable = '';
-        let leaderPoints = 0;
-        let tmpPoints = 0;
-        let diffToLeader = 0;
-        let diffToAbove = 0;
 
         for (let row of resultsTable.rows)
         {
@@ -280,43 +276,28 @@ function Results(props) {
                     continue;
                 }
                 newResultsTable += `<td>${val}</td>`
-
-                // Hold points for leader
-                if(rowCounter === 1) {
-                    leaderPoints = row.cells[row.cells.length-1].innerText;
-                }
-
-                // Hold points for current rider
-                if(cellCounter === row.cells.length-1) {
-                    diffToLeader = leaderPoints - cell.innerText
-                    diffToAbove = tmpPoints - cell.innerText
-
-                    if(diffToLeader <= 0) {
-                        diffToLeader = '-';
-                    }
-                    if(diffToAbove <= 0) {
-                        diffToAbove = '-';
-                    }
-
-                    tmpPoints = cell.innerText;
-                }
                 cellCounter++;
             }
             // Close tr
-            newResultsTable += `<td>${diffToLeader}</td><td>${diffToAbove}</td></tr>`;
+            newResultsTable += `</tr>`;
             rowCounter++;
         }
+
+        let showGap = activeSession.session.includes('RAC') ? '' : '<th>Gap to #1 / ahead</th>';
+        let showPoints = activeSession.session.includes('RAC') ? '<th>Points</th>' : '';
+
+
         let tableHeader = '<tr>\n' +
             '                        <th></th>\n' +
-            '                        <th>Pos</th>\n' +
+                                    `${showPoints}\n` +
             '                        <th>Num</th>\n' +
             '                        <th>Rider</th>\n' +
-            '                        <th>nation</th>\n' +
+            '                        <th>Nation</th>\n' +
             '                        <th>Team</th>\n' +
             '                        <th>Bike</th>\n' +
             '                        <th>Km/h</th>\n' +
             '                        <th>Time</th>\n' +
-            '                        <th>Gap</th>\n' +
+                                    `${showGap}\n` +
             '                    </tr>';
         setSessionTable(newResultsTable)
         setSessionTableHeader(tableHeader)

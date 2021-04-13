@@ -62,9 +62,9 @@ exports.getSession = async (req, res) => {
 
     // Strange motogp stuff
     if(session === 'RACE') {
-        session = 'rac';
+        session = 'RAC';
     } else if (session === 'RACE2') {
-        session = 'rac2';
+        session = 'RAC2';
     }
 
     let latestPath = `https://www.motogp.com/en/ajax/results/parse/${year}/${race}/${category}/${session}`;
