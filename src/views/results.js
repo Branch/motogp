@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Dropdown from '../components/dropdown';
+import Loader from '../assets/images/wheel.svg';
 
 function Results(props) {
 
@@ -28,7 +29,9 @@ function Results(props) {
         dropdownOpen: false
     })
 
-    const typesInFilter = <span><div>Hej</div><div>Hopp</div></span>;
+    const [loadingRaces, setLoadingRaces] = useState(false)
+    const [loadingCategories, setLoadingCategories] = useState(false)
+    const [loadingSessions, setLoadingSessions] = useState(false)
     const [yearsInFilter, assignYears] = useState([])
     const [racesInFilter, assignRaces] = useState([])
     const [categoriesInFilter, assignCategories] = useState([])
@@ -37,7 +40,6 @@ function Results(props) {
     const [sessionTable, setSessionTable] = useState([])
     const [tableHeader, setTableHeader] = useState([])
     const [sessionTableHeader, setSessionTableHeader] = useState([])
-    const [races, setRaces] = useState([])
 
     const setYears = async () => {
         let years = [];
@@ -52,10 +54,15 @@ function Results(props) {
     }
 
     const fetchRaces  = async (setDefault = false) => {
+
+        setLoadingRaces(true)
+
         const results = await fetch(`/motogp/races?` + new URLSearchParams({
             year: activeYear.year
         }))
         const data = await results.json();
+
+        setLoadingRaces(false)
 
         let races = JSON.parse(data.data)
 
@@ -89,11 +96,13 @@ function Results(props) {
     }
 
     const fetchCategories  = async (setDefault = false) => {
+        setLoadingCategories(true);
         const results = await fetch(`/motogp/categories?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race
         }))
         const data = await results.json();
+        setLoadingCategories(false);
         let categories = JSON.parse(data.data)
 
         let raceElements = []
@@ -111,13 +120,14 @@ function Results(props) {
             <div onClick={() => categoryClick(race)}>{race}</div>
         )
         assignCategories(elements)
+
         if(setDefault) {
             assignCategory({category:firstCategory, dropdownOpen: false})
         }
     }
 
     const fetchSessions  = async (setDefault = false) => {
-
+        setLoadingSessions(true);
         const results = await fetch(`/motogp/sessions?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
@@ -125,7 +135,7 @@ function Results(props) {
         }))
 
         const data = await results.json();
-
+        setLoadingSessions(false);
         let sessions = JSON.parse(data.data)
 
         let raceElements = []
@@ -348,33 +358,46 @@ function Results(props) {
             </h2>
             <div className={'index-main-results-inner__filters'}>
                 <div className={'index-main-results-inner__filters__filter active'}>
-                    <Dropdown
-                        class = {'races'}
-                        activeItem={activeRace.raceName}
-                        onActiveClick = {() => assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: activeRace.dropdownOpen !== true})}
-                        listItems = {racesInFilter}
-                        isOpen={activeRace.dropdownOpen}
-                    />
+                    {loadingRaces === true &&
+                        <img className={'loader'} src={Loader} />
+                    }
+                    {loadingRaces === false &&
+                        <Dropdown
+                            class = {'races'}
+                            activeItem={activeRace.raceName}
+                            onActiveClick = {() => assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: activeRace.dropdownOpen !== true})}
+                            listItems = {racesInFilter}
+                            isOpen={activeRace.dropdownOpen}
+                        />
+                    }
                 </div>
                 <div className={'index-main-results-inner__filters__filter active'}>
-                    <Dropdown
-                        class = {'categories'}
-                        activeItem={activeCategory.category}
-                        onActiveClick = {() => assignCategory({category:activeCategory.category, dropdownOpen: activeCategory.dropdownOpen !== true})}
-                        listItems = {categoriesInFilter}
-                        isOpen={activeCategory.dropdownOpen}
-                    />
-                    Category
+                    {loadingCategories === true &&
+                        <img className={'loader'} src={Loader} />
+                    }
+                    {loadingCategories === false &&
+                        <Dropdown
+                            class = {'categories'}
+                            activeItem={activeCategory.category}
+                            onActiveClick = {() => assignCategory({category:activeCategory.category, dropdownOpen: activeCategory.dropdownOpen !== true})}
+                            listItems = {categoriesInFilter}
+                            isOpen={activeCategory.dropdownOpen}
+                        />
+                    }
                 </div>
                 <div className={'index-main-results-inner__filters__filter active'}>
-                    <Dropdown
-                        class = {'sessions'}
-                        activeItem={activeSession.session}
-                        onActiveClick = {() => assignSession({session:activeSession.session, dropdownOpen: activeSession.dropdownOpen !== true})}
-                        listItems = {sessionsInFilter}
-                        isOpen={activeSession.dropdownOpen}
-                    />
-                    Session
+                    {loadingSessions === true &&
+                        <img className={'loader'} src={Loader} />
+                    }
+                    {loadingSessions === false &&
+                        <Dropdown
+                            class = {'sessions'}
+                            activeItem={activeSession.session}
+                            onActiveClick = {() => assignSession({session:activeSession.session, dropdownOpen: activeSession.dropdownOpen !== true})}
+                            listItems = {sessionsInFilter}
+                            isOpen={activeSession.dropdownOpen}
+                        />
+                    }
                 </div>
                 <Dropdown
                     class = {'type'}
@@ -384,26 +407,21 @@ function Results(props) {
                     isOpen={activeType.dropdownOpen}
                 />
             </div>
-            {activeType.type === 'Total standings' &&
-                <button onClick={fetchResults}>Go</button>
+            {categoriesInFilter <= 0 &&
+                <div className={'error-msg'}>
+                    <div>There's no data for the selected race weekend.</div>
+                    <div>This is most likely because the selected race weekend has no completed session yet, or it could be
+                        a temporary issue with getting the race data.
+                    </div>
+                    <div>Please try again later.</div>
+                </div>
             }
-            {activeType.type === 'Session' &&
-            <button onClick={fetchSession}>Go</button>
-            }
-                {activeType.type === 'Total standings' &&
-                    <table>
-                        <thead dangerouslySetInnerHTML={{__html: tableHeader}}>
-                        </thead>
-                        <tbody dangerouslySetInnerHTML={{__html: resultsTable}}></tbody>
-                    </table>
-                }
-                {activeType.type === 'Session' &&
-                    <table>
-                        <thead dangerouslySetInnerHTML={{__html: sessionTableHeader}}>
-                        </thead>
-                        <tbody dangerouslySetInnerHTML={{__html: sessionTable}}></tbody>
-                    </table>
-                }
+            <button disabled={categoriesInFilter <= 0 ? 'disabled' : ''} onClick={activeType.type === 'Total standings' ? fetchResults : fetchSession}>Go</button>
+            <table>
+                <thead dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? tableHeader : sessionTableHeader}}>
+                </thead>
+                <tbody dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? resultsTable : sessionTable}}></tbody>
+            </table>
         </div>
     </div>
 }

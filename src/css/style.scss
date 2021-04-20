@@ -33,6 +33,10 @@ h6,
   font-family: 'Roboto', sans-serif;
 }
 
+.loader {
+  width: 2rem;
+}
+
 .dropdown {
   &__container {
     display: inline-block;
@@ -376,6 +380,10 @@ span.highlight {
         border-radius: 0.5rem;
         border: none;
         margin: 3rem 0;
+
+        &:disabled {
+          background-color: #ccc;
+        }
       }
 
       &__filters {
