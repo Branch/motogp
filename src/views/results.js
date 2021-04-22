@@ -53,7 +53,7 @@ function Results(props) {
         assignYears(elements)
     }
 
-    const fetchRaces  = async (setDefault = false) => {
+    const fetchRaces  = async () => {
 
         setLoadingRaces(true)
 
@@ -90,12 +90,11 @@ function Results(props) {
         assignRaces(elements)
 
         // Set active race when loading view
-        if(setDefault) {
-            assignRace({race:firstRace, raceName:firstRaceName, dropdownOpen: false})
-        }
+        assignRace({race:firstRace, raceName:firstRaceName, dropdownOpen: false})
+
     }
 
-    const fetchCategories  = async (setDefault = false) => {
+    const fetchCategories  = async () => {
         setLoadingCategories(true);
         const results = await fetch(`/motogp/categories?` + new URLSearchParams({
             year: activeYear.year,
@@ -121,12 +120,11 @@ function Results(props) {
         )
         assignCategories(elements)
 
-        if(setDefault) {
-            assignCategory({category:firstCategory, dropdownOpen: false})
-        }
+        assignCategory({category:firstCategory, dropdownOpen: false})
+
     }
 
-    const fetchSessions  = async (setDefault = false) => {
+    const fetchSessions  = async () => {
         setLoadingSessions(true);
         const results = await fetch(`/motogp/sessions?` + new URLSearchParams({
             year: activeYear.year,
@@ -153,9 +151,8 @@ function Results(props) {
             <div onClick={() => sessionClick(race)}>{race}</div>
         )
         assignSessions(elements)
-        if(setDefault) {
-            sessionClick(firstSession)
-        }
+        assignSession({session:firstSession, dropdownOpen: false})
+
     }
 
     const yearClick = async (year) => {
@@ -326,19 +323,18 @@ function Results(props) {
     }, [])
 
     useEffect(() => {
-        fetchRaces(true)
-        fetchCategories(true)
+        fetchRaces()
     }, [activeYear.year])
 
     useEffect(() => {
         if(activeRace.race !== undefined) {
-            fetchCategories(true)
+            fetchCategories()
         }
-    }, [activeRace.race])
+    }, [activeRace.raceName])
 
     useEffect(() => {
         if(activeCategory.category !== undefined) {
-            fetchSessions(true)
+            fetchSessions()
         }
     }, [activeCategory.category])
 
