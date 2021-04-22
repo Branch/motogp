@@ -46,6 +46,7 @@ h6,
       cursor: pointer;
       padding-right: 4rem;
       transition: all 0.2s linear;
+      font-weight: bold;
 
       &:hover {
         transition: all 0.2s linear;
@@ -79,9 +80,30 @@ h6,
       }
 
       &.open {
-        height: 10rem;
+        height: auto;
         overflow-y: auto;
-        background-color: $beige;
+        background-color: #fff;
+        padding: 0.5rem 1rem;
+        z-index: 9999999;
+
+        div {
+          text-align: left;
+          transition: all 0.2s linear;
+          color: $green-dark;
+          font-weight: bold;
+
+          &:hover {
+            transition: all 0.2s linear;
+            color: orange;
+          }
+        }
+      }
+    }
+
+    &__races,
+    &__numbers {
+      &.open {
+        height: 10rem;
       }
     }
   }

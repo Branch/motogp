@@ -338,6 +338,51 @@ function Results(props) {
         }
     }, [activeCategory.category])
 
+    useEffect(() => {
+        if(activeRace.dropdownOpen === true) {
+            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignYear({year:activeYear.year, dropdownOpen: false})
+            assignType({type:activeType.type, dropdownOpen: false})
+            assignSession({session:activeSession.session, dropdownOpen: false})
+        }
+    }, [activeRace.dropdownOpen])
+
+    useEffect(() => {
+        if(activeCategory.dropdownOpen === true) {
+            assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
+            assignYear({year:activeYear.year, dropdownOpen: false})
+            assignType({type:activeType.type, dropdownOpen: false})
+            assignSession({session:activeSession.session, dropdownOpen: false})
+        }
+    }, [activeCategory.dropdownOpen])
+
+    useEffect(() => {
+        if(activeType.dropdownOpen === true) {
+            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignYear({year:activeYear.year, dropdownOpen: false})
+            assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
+            assignSession({session:activeSession.session, dropdownOpen: false})
+        }
+    }, [activeType.dropdownOpen])
+
+    useEffect(() => {
+        if(activeSession.dropdownOpen === true) {
+            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignYear({year:activeYear.year, dropdownOpen: false})
+            assignType({type:activeType.type, dropdownOpen: false})
+            assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
+        }
+    }, [activeSession.dropdownOpen])
+
+    useEffect(() => {
+        if(activeYear.dropdownOpen === true) {
+            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignSession({session:activeSession.session, dropdownOpen: false})
+            assignType({type:activeType.type, dropdownOpen: false})
+            assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
+        }
+    }, [activeYear.dropdownOpen])
+
 
 
     return <div className={'index-main-results'} ref={props.ref}>
@@ -374,6 +419,7 @@ function Results(props) {
                     {loadingCategories === false &&
                         <Dropdown
                             class = {'categories'}
+                            noOfCategories={categoriesInFilter.length}
                             activeItem={activeCategory.category}
                             onActiveClick = {() => assignCategory({category:activeCategory.category, dropdownOpen: activeCategory.dropdownOpen !== true})}
                             listItems = {categoriesInFilter}
@@ -387,23 +433,28 @@ function Results(props) {
                     }
                     {loadingSessions === false &&
                         <Dropdown
-                            class = {'sessions'}
+                            class={'sessions'}
+                            noOfCategories={categoriesInFilter.length}
                             activeItem={activeSession.session}
-                            onActiveClick = {() => assignSession({session:activeSession.session, dropdownOpen: activeSession.dropdownOpen !== true})}
-                            listItems = {sessionsInFilter}
+                            onActiveClick={() => assignSession({
+                                session: activeSession.session,
+                                dropdownOpen: activeSession.dropdownOpen !== true
+                            })}
+                            listItems={sessionsInFilter}
                             isOpen={activeSession.dropdownOpen}
                         />
                     }
                 </div>
                 <Dropdown
                     class = {'type'}
+                    noOfCategories={categoriesInFilter.length}
                     activeItem={activeType.type}
                     onActiveClick = {() => assignType({type:activeType.type, dropdownOpen: activeType.dropdownOpen !== true})}
                     listItems = {[<div onClick={() => typeClick('Total standings')}>Total standings</div>, <div onClick={() => typeClick('Session')}>Session</div>]}
                     isOpen={activeType.dropdownOpen}
                 />
             </div>
-            {categoriesInFilter <= 0 &&
+            {categoriesInFilter.length <= 0 &&
                 <div className={'error-msg'}>
                     <div>There's no data for the selected race weekend.</div>
                     <div>This is most likely because the selected race weekend has no completed session yet, or it could be
@@ -412,12 +463,16 @@ function Results(props) {
                     <div>Please try again later.</div>
                 </div>
             }
-            <button disabled={categoriesInFilter <= 0 ? 'disabled' : ''} onClick={activeType.type === 'Total standings' ? fetchResults : fetchSession}>Go</button>
-            <table>
-                <thead dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? tableHeader : sessionTableHeader}}>
-                </thead>
-                <tbody dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? resultsTable : sessionTable}}></tbody>
-            </table>
+            {categoriesInFilter.length > 0 &&
+                <button onClick={activeType.type === 'Total standings' ? fetchResults : fetchSession}>Go</button>
+            }
+            {categoriesInFilter.length > 0 &&
+                <table>
+                    <thead dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? tableHeader : sessionTableHeader}}>
+                    </thead>
+                    <tbody dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? resultsTable : sessionTable}}></tbody>
+                </table>
+            }
         </div>
     </div>
 }
