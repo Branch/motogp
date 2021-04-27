@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Dropdown from '../components/dropdown';
 import Loader from '../assets/images/wheel.svg';
+import Country from '../helpers/country';
 
 function Results(props) {
 
@@ -25,8 +26,12 @@ function Results(props) {
     })
 
     const [activeType, assignType] = useState({
-        type: 'Total standings',
+        type: 'Session',
         dropdownOpen: false
+    })
+    const [loadedSessionInfo, assignLoadedSessionInfo] = useState({
+        text: '',
+        visible: false
     })
 
     const [loadingRaces, setLoadingRaces] = useState(false)
@@ -40,6 +45,17 @@ function Results(props) {
     const [sessionTable, setSessionTable] = useState([])
     const [tableHeader, setTableHeader] = useState([])
     const [sessionTableHeader, setSessionTableHeader] = useState([])
+
+    const setLoadedRaceInfo = async () => {
+        let text = '';
+
+        text = `Total standings as of ${activeRace.raceName}`;
+
+        if(activeType.type === 'Session') {
+            text = `${activeCategory.category} ${activeSession.session} of the ${activeRace.raceName}`;
+        }
+        assignLoadedSessionInfo({text: text, visible: true})
+    }
 
     const setYears = async () => {
         let years = [];
@@ -213,6 +229,15 @@ function Results(props) {
                             cellCounter++;
                             continue;
                         }
+
+                        // Country flag
+                        if(cellCounter === 3) {
+                            let country = Country(val);
+
+                            newResultsTable += `<td><img class='country-flag' src='https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/${country}.svg' /></td>`
+                            cellCounter++;
+                            continue;
+                        }
                         newResultsTable += `<td>${val}</td>`
 
                         // Hold points for leader
@@ -252,6 +277,7 @@ function Results(props) {
                 setResultsTable(newResultsTable)
                 setTableHeader(tableHeader)
             })
+        setLoadedRaceInfo();
     }
 
     const fetchSession = async () => {
@@ -289,6 +315,15 @@ function Results(props) {
                     cellCounter++;
                     continue;
                 }
+
+                // Country flag
+                if(activeSession.session.includes('RAC') && cellCounter === 4 || !activeSession.session.includes('RAC') && cellCounter === 3) {
+                    let country = Country(val);
+
+                    newResultsTable += `<td><img class='country-flag' src='https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/${country}.svg' /></td>`
+                    cellCounter++;
+                    continue;
+                }
                 newResultsTable += `<td>${val}</td>`
                 cellCounter++;
             }
@@ -315,6 +350,7 @@ function Results(props) {
             '                    </tr>';
         setSessionTable(newResultsTable)
         setSessionTableHeader(tableHeader)
+        setLoadedRaceInfo();
     }
 
     // Use useEffect to call fetchMessage() on initial render
@@ -412,11 +448,12 @@ function Results(props) {
                         />
                     }
                 </div>
-                <div className={'index-main-results-inner__filters__filter active'}>
-                    {loadingCategories === true &&
+                {categoriesInFilter.length > 0 &&
+                    <div className={'index-main-results-inner__filters__filter active'}>
+                        {loadingCategories === true &&
                         <img className={'loader'} src={Loader} />
-                    }
-                    {loadingCategories === false &&
+                        }
+                        {loadingCategories === false &&
                         <Dropdown
                             class = {'categories'}
                             noOfCategories={categoriesInFilter.length}
@@ -425,13 +462,15 @@ function Results(props) {
                             listItems = {categoriesInFilter}
                             isOpen={activeCategory.dropdownOpen}
                         />
-                    }
-                </div>
-                <div className={'index-main-results-inner__filters__filter active'}>
-                    {loadingSessions === true &&
+                        }
+                    </div>
+                }
+                {categoriesInFilter.length > 0 &&
+                    <div className={'index-main-results-inner__filters__filter active'}>
+                        {loadingSessions === true &&
                         <img className={'loader'} src={Loader} />
-                    }
-                    {loadingSessions === false &&
+                        }
+                        {loadingSessions === false &&
                         <Dropdown
                             class={'sessions'}
                             noOfCategories={categoriesInFilter.length}
@@ -443,8 +482,9 @@ function Results(props) {
                             listItems={sessionsInFilter}
                             isOpen={activeSession.dropdownOpen}
                         />
-                    }
-                </div>
+                        }
+                    </div>
+                }
                 <Dropdown
                     class = {'type'}
                     noOfCategories={categoriesInFilter.length}
@@ -456,15 +496,20 @@ function Results(props) {
             </div>
             {categoriesInFilter.length <= 0 &&
                 <div className={'error-msg'}>
-                    <div>There's no data for the selected race weekend.</div>
-                    <div>This is most likely because the selected race weekend has no completed session yet, or it could be
+                    <div className={'error-msg__title'}><i className="fas fa-exclamation-triangle"></i>There's no data for the {activeRace.raceName}!</div>
+                    <div>This is most likely because the {activeRace.raceName} has no completed sessions yet, or it could be
                         a temporary issue with getting the race data.
                     </div>
-                    <div>Please try again later.</div>
+                    <div className={'error-msg__later'}>Please change race or try again later.</div>
                 </div>
             }
             {categoriesInFilter.length > 0 &&
                 <button onClick={activeType.type === 'Total standings' ? fetchResults : fetchSession}>Go</button>
+            }
+            {categoriesInFilter.length > 0 &&
+                <div className={'loaded-view-info'}>
+                    {loadedSessionInfo.text}
+                </div>
             }
             {categoriesInFilter.length > 0 &&
                 <table>

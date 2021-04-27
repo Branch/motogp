@@ -82,7 +82,7 @@ function Index(props) {
                 <div className={'index-main-title-text'}>
                     <h1>Simple MotoGP results</h1>
                     <div className={'separator'}></div>
-                    <p>This site is meant to show results from MotoGP in a simple and accessible way.<br />Note that this site is a hobby of mine and <span className={'highlight'}>is not affiliated with MotoGP / Dorna.</span></p>
+                    <p>This site is meant to show results from MotoGP in a simple and accessible way.<br />Note that this site is a hobby of mine and is<span className={'highlight'}> not affiliated with MotoGP / Dorna.</span></p>
                 </div>
                 <div className={'index-main-title-images'}>
                     <img src={Marc} />

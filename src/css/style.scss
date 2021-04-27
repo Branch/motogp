@@ -37,6 +37,31 @@ h6,
   width: 2rem;
 }
 
+.country-flag {
+  width: 2rem;
+}
+
+.error-msg {
+  background-color: #fff;
+  padding: 1rem;
+  margin-top: 5rem;
+
+  &__title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+
+    i {
+      color: rgb(249, 37, 21);
+      margin-right: 0.5rem;
+    }
+  }
+  
+  &__later {
+    margin-top: 0.5rem;
+  }
+}
+
 .dropdown {
   &__container {
     display: inline-block;
@@ -45,6 +70,7 @@ h6,
       position: relative;
       cursor: pointer;
       padding-right: 4rem;
+      padding-left: 1rem;
       transition: all 0.2s linear;
       font-weight: bold;
 
@@ -94,7 +120,7 @@ h6,
 
           &:hover {
             transition: all 0.2s linear;
-            color: orange;
+            color: $orange;
           }
         }
       }
