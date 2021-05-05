@@ -43,8 +43,7 @@ h6,
 
 .error-msg {
   background-color: #fff;
-  padding: 1rem;
-  margin-top: 5rem;
+  height: 0;
 
   &__title {
     font-size: 1.2rem;
@@ -60,12 +59,19 @@ h6,
   &__later {
     margin-top: 0.5rem;
   }
+
+  &.active {
+    height: auto;
+    padding: 1rem;
+    margin-top: 5rem;
+  }
 }
 
 .loaded-view-info {
   background-color: #fff;
   position: relative;
   padding: 1rem;
+  margin-bottom: 3rem;
 
   .filters-changed-notice {
     position: absolute;
