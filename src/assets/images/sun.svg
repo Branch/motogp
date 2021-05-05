@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+    <defs>
+        <linearGradient id="ldio-c44740qohb-gradient" gradientUnits="userSpaceOnUse" x1="50" y1="29" x2="50" y2="7.75">
+            <stop offset="0" style="stop-color:#ffee99"></stop>
+            <stop offset="0.5" style="stop-opacity:0.3;stop-color:#ffffbb"></stop>
+            <stop offset="1" style="stop-opacity:0;stop-color:#ffffff"></stop>
+        </linearGradient>
+        <path id="ldio-c44740qohb-path" fill="url(#ldio-c44740qohb-gradient)" d="M55.2 30.7l9.7-36.2H35.1l9.7 36.2c1.7-0.4 3.4-0.7 5.2-0.7S53.5 30.3 55.2 30.7z"></path>
+    </defs>
+
+    <g transform="translate(50 50)">
+        <g>
+            <animateTransform attributeName="transform" type="rotate" values="0;360" keyTimes="0;1" repeatCount="indefinite" dur="14.285714285714286s"></animateTransform>
+            <use xlink:href="#ldio-c44740qohb-path" transform="rotate(0) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(45) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(90) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(135) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(180) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(225) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(270) translate(-50 -50)"></use><use xlink:href="#ldio-c44740qohb-path" transform="rotate(315) translate(-50 -50)"></use>
+        </g>
+    </g>
+    <circle fill="#ffdd55" cx="50" cy="50" r="15"></circle>
+</svg>

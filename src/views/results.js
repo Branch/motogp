@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import { Fade } from '@material-ui/core';
 import Dropdown from '../components/dropdown';
+import Weather from '../components/weather';
 import Loader from '../assets/images/wheel.svg';
 import Country from '../helpers/country';
 
@@ -8,6 +10,14 @@ function Results(props) {
     const [activeYear, assignYear] = useState({
         year: new Date().getFullYear(),
         dropdownOpen: false
+    })
+    const [button, assignButtonStatus] = useState({
+        clicked: false,
+        loading: false,
+    })
+
+    const [filtersChanged, assignFilterStatus] = useState({
+        changed: false,
     })
     const [activeRace, assignRace] = useState({
         race: '',
@@ -23,6 +33,14 @@ function Results(props) {
     const [activeSession, assignSession] = useState({
         session: '',
         dropdownOpen: false
+    })
+
+    const [activeSessionData, assignSessionData] = useState({
+        track: '',
+        air: '',
+        lapRecord: '',
+        raceLapRecord: '',
+        sessionBestLap: ''
     })
 
     const [activeType, assignType] = useState({
@@ -69,7 +87,7 @@ function Results(props) {
         assignYears(elements)
     }
 
-    const fetchRaces  = async () => {
+    const fetchRaces = async () => {
 
         setLoadingRaces(true)
 
@@ -193,11 +211,14 @@ function Results(props) {
 
     // Total standings
     const fetchResults = async () => {
+        assignButtonStatus({clicked: true, loading: true})
+
         fetch(`/motogp/standings?` + new URLSearchParams({
-                year: activeYear.year,
-                race: activeRace.race,
-                category: activeCategory.category
-            }))
+            year: activeYear.year,
+            race: activeRace.race,
+            category: activeCategory.category,
+            session: 'RAC'
+        }))
             .then(res => res.json()) // Process the incoming data
             .then(json => {
                 let html = window.document.createElement('html');
@@ -276,11 +297,14 @@ function Results(props) {
                     '                    </tr>';
                 setResultsTable(newResultsTable)
                 setTableHeader(tableHeader)
+                assignButtonStatus({clicked: true, loading: false})
+                setLoadedRaceInfo();
             })
-        setLoadedRaceInfo();
+
     }
 
     const fetchSession = async () => {
+        assignButtonStatus({clicked: true, loading: true})
         const results = await fetch(`/motogp/session?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
@@ -293,6 +317,10 @@ function Results(props) {
         let html = window.document.createElement('html');
         html.innerHTML = data.data
         let resultsTable = html.getElementsByTagName('table')[0]
+        let sessionInfoTable = html.getElementsByTagName('table')[1]
+        let sessionTrackInfo = html.getElementsByClassName('padright10')[0].innerText.split(' ')[2];
+        let sessionWeatherInfo = html.getElementsByClassName('padright10')[1].innerText.split(' ')[1];
+        assignSessionData({track: sessionTrackInfo, air: sessionWeatherInfo, lapRecord: '', raceLapRecord: '', sessionBestLap: ''})
         let rowCounter = 0;
         let newResultsTable = '';
 
@@ -332,6 +360,14 @@ function Results(props) {
             rowCounter++;
         }
 
+        for(let row of sessionInfoTable.rows) {
+            console.log('NY RAD');
+            for(let cell of row.cells)
+            {
+                console.log(cell.innerText)
+            }
+        }
+
         let showGap = activeSession.session.includes('RAC') ? '' : '<th>Gap to #1 / ahead</th>';
         let showPoints = activeSession.session.includes('RAC') ? '<th>Points</th>' : '';
 
@@ -350,7 +386,14 @@ function Results(props) {
             '                    </tr>';
         setSessionTable(newResultsTable)
         setSessionTableHeader(tableHeader)
+        assignButtonStatus({clicked: true, loading: false})
         setLoadedRaceInfo();
+    }
+
+    const buttonClick = async () => {
+        activeType.type === 'Total standings' ? fetchResults() : fetchSession();
+        assignButtonStatus({clicked: true, loading: false})
+        assignFilterStatus({changed: false})
     }
 
     // Use useEffect to call fetchMessage() on initial render
@@ -418,6 +461,14 @@ function Results(props) {
             assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
         }
     }, [activeYear.dropdownOpen])
+
+    useEffect(() => {
+        if(button.clicked === true) {
+            assignFilterStatus({changed: true})
+        }
+    }, [activeSession.session, activeYear.year, activeCategory.category, activeRace.race, activeType.type])
+
+
 
 
 
@@ -494,7 +545,7 @@ function Results(props) {
                     isOpen={activeType.dropdownOpen}
                 />
             </div>
-            {categoriesInFilter.length <= 0 &&
+            <Fade in={categoriesInFilter.length <= 0}>
                 <div className={'error-msg'}>
                     <div className={'error-msg__title'}><i className="fas fa-exclamation-triangle"></i>There's no data for the {activeRace.raceName}!</div>
                     <div>This is most likely because the {activeRace.raceName} has no completed sessions yet, or it could be
@@ -502,15 +553,50 @@ function Results(props) {
                     </div>
                     <div className={'error-msg__later'}>Please change race or try again later.</div>
                 </div>
-            }
-            {categoriesInFilter.length > 0 &&
-                <button onClick={activeType.type === 'Total standings' ? fetchResults : fetchSession}>Go</button>
-            }
-            {categoriesInFilter.length > 0 &&
+            </Fade>
+            <Fade in={categoriesInFilter.length > 0}>
+                <button onClick={buttonClick}>Go</button>
+            </Fade>
+            <Fade in={categoriesInFilter.length > 0 && button.clicked}>
                 <div className={'loaded-view-info'}>
-                    {loadedSessionInfo.text}
+                    <div className={'loaded-view-info__text'}>{loadedSessionInfo.text}</div>
+                    {activeType.type === 'Session' &&
+                        <div className={'loaded-view-info__columns'}>
+                            <div className={'loaded-view-info__columns__column'}>
+                                <div className={'loaded-view-info__columns__column__title'}>Track conditions</div>
+                                {activeType.type === 'Session' &&
+                                <Fade in={activeSessionData.track !== ''}>
+                                    <Weather
+                                        type={activeSessionData.track}
+                                    />
+                                </Fade>
+                                }
+                            </div>
+                            <div className={'loaded-view-info__columns__column'}>
+                                <div className={'loaded-view-info__columns__column__title'}>Session best lap</div>
+                                <Fade in={activeSessionData.track !== ''}>
+                                    <div>1 min 33s</div>
+                                </Fade>
+                            </div>
+                            <div className={'loaded-view-info__columns__column'}>
+                                <div className={'loaded-view-info__columns__column__title'}>Best race lap of all time</div>
+                                <Fade in={activeSessionData.track !== ''}>
+                                    <div>1 min 55s</div>
+                                </Fade>
+                            </div>
+                            <div className={'loaded-view-info__columns__column'}>
+                                <div className={'loaded-view-info__columns__column__title'}>Best lap of all time</div>
+                                <Fade in={activeSessionData.track !== ''}>
+                                    <div>1 min 44s</div>
+                                </Fade>
+                            </div>
+                        </div>
+                    }
+                    <Fade in={filtersChanged.changed}>
+                        <div className={'filters-changed-notice'}><i className="fas fa-exclamation-circle"></i>Filters changed</div>
+                    </Fade>
                 </div>
-            }
+            </Fade>
             {categoriesInFilter.length > 0 &&
                 <table>
                     <thead dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? tableHeader : sessionTableHeader}}>
