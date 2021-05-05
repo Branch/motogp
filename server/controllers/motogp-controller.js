@@ -5,8 +5,9 @@ exports.getLatest = async (req, res) => {
     let year = req.query.year;
     let race = req.query.race;
     let category = req.query.category;
+    let session = req.query.session ? req.query.session : 'RAC';
 
-    let latestPath = `https://www.motogp.com/en/Results+Statistics/${year}/${race}/${category}/RAC/World+Standing`;
+    let latestPath = `https://www.motogp.com/en/Results+Statistics/${year}/${race}/${category}/${session}/World+Standing`;
 
     fetch(latestPath)
         .catch(err => res.send({status: 500, data: `Request to url ${latestPath} failed`}))
