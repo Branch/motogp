@@ -16,6 +16,10 @@ function Results(props) {
         loading: false,
     })
 
+    const [error, setErrorStatus] = useState({
+        status: false
+    })
+
     const [filtersChanged, assignFilterStatus] = useState({
         changed: false,
     })
@@ -169,6 +173,10 @@ function Results(props) {
         const data = await results.json();
         setLoadingSessions(false);
         let sessions = JSON.parse(data.data)
+
+        if(sessions == null) {
+            return;
+        }
 
         let raceElements = []
         let first = true
@@ -391,12 +399,13 @@ function Results(props) {
     }
 
     const buttonClick = async () => {
+        setErrorStatus({status: false})
         activeType.type === 'Total standings' ? fetchResults() : fetchSession();
         assignButtonStatus({clicked: true, loading: false})
         assignFilterStatus({changed: false})
     }
 
-    // Use useEffect to call fetchMessage() on initial render
+    // Use useEffect to call setYears() on initial render
     useEffect(() => {
         setYears()
     }, [])
@@ -408,6 +417,9 @@ function Results(props) {
     useEffect(() => {
         if(activeRace.race !== undefined) {
             fetchCategories()
+        }
+        if(activeCategory.category !== undefined) {
+            fetchSessions()
         }
     }, [activeRace.raceName])
 
@@ -545,8 +557,8 @@ function Results(props) {
                     isOpen={activeType.dropdownOpen}
                 />
             </div>
-            <Fade in={categoriesInFilter.length <= 0}>
-                <div className={categoriesInFilter.length <= 0 ? 'error-msg active' : 'error-msg'}>
+            <Fade in={categoriesInFilter.length <= 0 || error.status}>
+                <div className={categoriesInFilter.length <= 0 || error.status ? 'error-msg active' : 'error-msg'}>
                     <div className={'error-msg__title'}><i className="fas fa-exclamation-triangle"></i>There's no data for the {activeRace.raceName}!</div>
                     <div>This is most likely because the {activeRace.raceName} has no completed sessions yet, or it could be
                         a temporary issue with getting the race data.
