@@ -53,7 +53,8 @@ function Results(props) {
     })
     const [loadedSessionInfo, assignLoadedSessionInfo] = useState({
         text: '',
-        visible: false
+        visible: false,
+        type: ''
     })
 
     const [loadingRaces, setLoadingRaces] = useState(false)
@@ -76,7 +77,7 @@ function Results(props) {
         if(activeType.type === 'Session') {
             text = `${activeCategory.category} ${activeSession.session} of the ${activeRace.raceName}`;
         }
-        assignLoadedSessionInfo({text: text, visible: true})
+        assignLoadedSessionInfo({text: text, visible: true, type: activeType.type})
     }
 
     const setYears = async () => {
@@ -575,7 +576,7 @@ function Results(props) {
             <Fade in={categoriesInFilter.length > 0}>
                 <button onClick={buttonClick}>Go</button>
             </Fade>
-            <Fade in={categoriesInFilter.length > 0 && button.clicked}>
+            <Fade in={categoriesInFilter.length > 0 && button.clicked && activeType.type === loadedSessionInfo.type}>
                 <div className={'loaded-view-info'}>
                     <div className={'loaded-view-info__text'}>{loadedSessionInfo.text}</div>
                     {activeType.type === 'Session' &&
@@ -615,13 +616,20 @@ function Results(props) {
                     </Fade>
                 </div>
             </Fade>
-            {categoriesInFilter.length > 0 &&
-                <table>
-                    <thead dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? tableHeader : sessionTableHeader}}>
-                    </thead>
-                    <tbody dangerouslySetInnerHTML={{__html: activeType.type === 'Total standings' ? resultsTable : sessionTable}}></tbody>
-                </table>
-            }
+                    {loadedSessionInfo.type === 'Total standings' && activeType.type === 'Total standings' &&
+                        <table>
+                            <thead dangerouslySetInnerHTML={{__html: tableHeader}}>
+                            </thead>
+                            <tbody dangerouslySetInnerHTML={{__html: resultsTable}}></tbody>
+                        </table>
+                    }
+                    {loadedSessionInfo.type === 'Session' && activeType.type === 'Session' &&
+                        <table>
+                            <thead dangerouslySetInnerHTML={{__html: sessionTableHeader}}>
+                            </thead>
+                            <tbody dangerouslySetInnerHTML={{__html: sessionTable}}></tbody>
+                        </table>
+                    }
         </div>
     </div>
 }
