@@ -142,6 +142,12 @@ function Results(props) {
         setLoadingCategories(false);
         let categories = JSON.parse(data.data)
 
+        if(categories.length <= 0) {
+            setErrorStatus({status: true})
+        } else if(error.status === true) {
+            setErrorStatus({status: false})
+        }
+
         let raceElements = []
         let first = true
         let firstCategory = ''
@@ -415,16 +421,16 @@ function Results(props) {
     }, [activeYear.year])
 
     useEffect(() => {
-        if(activeRace.race !== undefined) {
+        if(activeRace.race !== undefined && activeRace.race !== '') {
             fetchCategories()
         }
-        if(activeCategory.category !== undefined) {
+        if(activeCategory.category !== undefined && activeCategory.category !== ''  && activeRace.race !== undefined && activeRace.race !== '') {
             fetchSessions()
         }
     }, [activeRace.raceName])
 
     useEffect(() => {
-        if(activeCategory.category !== undefined) {
+        if(activeCategory.category !== undefined && activeCategory.category !== '' && activeRace.race !== undefined && activeRace.race !== '') {
             fetchSessions()
         }
     }, [activeCategory.category])
@@ -557,8 +563,8 @@ function Results(props) {
                     isOpen={activeType.dropdownOpen}
                 />
             </div>
-            <Fade in={categoriesInFilter.length <= 0 || error.status}>
-                <div className={categoriesInFilter.length <= 0 || error.status ? 'error-msg active' : 'error-msg'}>
+            <Fade in={error.status}>
+                <div className={error.status ? 'error-msg active' : 'error-msg'}>
                     <div className={'error-msg__title'}><i className="fas fa-exclamation-triangle"></i>There's no data for the {activeRace.raceName}!</div>
                     <div>This is most likely because the {activeRace.raceName} has no completed sessions yet, or it could be
                         a temporary issue with getting the race data.
