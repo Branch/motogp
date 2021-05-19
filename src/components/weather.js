@@ -5,11 +5,17 @@ import Rain from '../assets/images/rain.svg';
 const Weather = (props) => {
     if(props.type === 'Dry') {
         return (
-            <img src={Sun} />
+            <div>
+                <img src={Sun} />
+                {props.degrees} C
+            </div>
         )
     } else if(props.type === 'Wet') {
         return (
-            <img src={Rain} />
+            <div>
+                <img src={Rain} />
+                {props.degrees} C
+            </div>
         )
     }
     return null;

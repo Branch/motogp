@@ -42,9 +42,20 @@ function Results(props) {
     const [activeSessionData, assignSessionData] = useState({
         track: '',
         air: '',
-        lapRecord: '',
         raceLapRecord: '',
-        sessionBestLap: ''
+        sessionBestLapLap: '',
+        sessionBestLapTime: '',
+        sessionBestLapRider: '',
+        sessionBestLapSpeed: '',
+        lapRecordYear: '',
+        lapRecordLapTime: '',
+        lapRecordRider: '',
+        lapRecordSpeed: '',
+        raceLapRecordYear: '',
+        raceLapRecordLapTime: '',
+        raceLapRecordRider: '',
+        raceLapRecordSpeed: '',
+        poleLap: ''
     })
 
     const [activeType, assignType] = useState({
@@ -335,9 +346,76 @@ function Results(props) {
         let sessionInfoTable = html.getElementsByTagName('table')[1]
         let sessionTrackInfo = html.getElementsByClassName('padright10')[0].innerText.split(' ')[2];
         let sessionWeatherInfo = html.getElementsByClassName('padright10')[1].innerText.split(' ')[1];
-        assignSessionData({track: sessionTrackInfo, air: sessionWeatherInfo, lapRecord: '', raceLapRecord: '', sessionBestLap: ''})
         let rowCounter = 0;
         let newResultsTable = '';
+
+        let sessionInfoRowCounter = 0;
+        let poleLapInfo = '';
+
+        let sessionBestLapLap = '';
+        let sessionBestLapTime = '';
+        let sessionBestLapRider = '';
+        let sessionBestLapSpeed = '';
+
+        let lapRecordYear = '';
+        let lapRecordLapTime = '';
+        let lapRecordRider = '';
+        let lapRecordSpeed = '';
+
+        let raceLapRecordYear = '';
+        let raceLapRecordLapTime = '';
+        let raceLapRecordRider = '';
+        let raceLapRecordSpeed = '';
+
+        if(sessionInfoTable.rows.length === 4) {
+            sessionBestLapLap = sessionInfoTable.rows[1].cells[1].innerText.split(' ')[1];
+            sessionBestLapTime = sessionInfoTable.rows[1].cells[3].innerText;
+            sessionBestLapRider = sessionInfoTable.rows[1].cells[2].innerText;
+            sessionBestLapSpeed = sessionInfoTable.rows[1].cells[4].innerText;
+
+            raceLapRecordYear = sessionInfoTable.rows[2].cells[1].innerText;
+            raceLapRecordLapTime = sessionInfoTable.rows[2].cells[3].innerText;
+            raceLapRecordRider = sessionInfoTable.rows[2].cells[2].innerText;
+            raceLapRecordSpeed = sessionInfoTable.rows[2].cells[4].innerText;
+
+            lapRecordYear = sessionInfoTable.rows[3].cells[1].innerText;
+            lapRecordLapTime = sessionInfoTable.rows[3].cells[3].innerText;
+            lapRecordRider = sessionInfoTable.rows[3].cells[2].innerText;
+            lapRecordSpeed = sessionInfoTable.rows[3].cells[4].innerText;
+        } else if (sessionInfoTable.rows.length === 3) {
+            sessionBestLapLap = sessionInfoTable.rows[0].cells[1].innerText.split(' ')[1];
+            sessionBestLapTime = sessionInfoTable.rows[0].cells[3].innerText;
+            sessionBestLapRider = sessionInfoTable.rows[0].cells[2].innerText;
+            sessionBestLapSpeed = sessionInfoTable.rows[0].cells[4].innerText;
+
+            raceLapRecordYear = sessionInfoTable.rows[1].cells[1].innerText;
+            raceLapRecordLapTime = sessionInfoTable.rows[1].cells[3].innerText;
+            raceLapRecordRider = sessionInfoTable.rows[1].cells[2].innerText;
+            raceLapRecordSpeed = sessionInfoTable.rows[1].cells[4].innerText;
+
+            lapRecordYear = sessionInfoTable.rows[2].cells[1].innerText;
+            lapRecordLapTime = sessionInfoTable.rows[2].cells[3].innerText;
+            lapRecordRider = sessionInfoTable.rows[2].cells[2].innerText;
+            lapRecordSpeed = sessionInfoTable.rows[2].cells[4].innerText;
+        }
+
+        assignSessionData({
+            track: sessionTrackInfo,
+            air: sessionWeatherInfo,
+            sessionBestLapLap: sessionBestLapLap,
+            sessionBestLapTime: sessionBestLapTime,
+            sessionBestLapRider: sessionBestLapRider,
+            sessionBestLapSpeed: sessionBestLapSpeed,
+            lapRecordYear: lapRecordYear,
+            lapRecordLapTime: lapRecordLapTime,
+            lapRecordRider: lapRecordRider,
+            lapRecordSpeed: lapRecordSpeed,
+            raceLapRecordYear: raceLapRecordYear,
+            raceLapRecordLapTime: raceLapRecordLapTime,
+            raceLapRecordRider: raceLapRecordRider,
+            raceLapRecordSpeed: raceLapRecordSpeed,
+            poleLap: poleLapInfo
+        })
 
         for (let row of resultsTable.rows)
         {
@@ -373,14 +451,6 @@ function Results(props) {
             // Close tr
             newResultsTable += `</tr>`;
             rowCounter++;
-        }
-
-        for(let row of sessionInfoTable.rows) {
-            console.log('NY RAD');
-            for(let cell of row.cells)
-            {
-                console.log(cell.innerText)
-            }
         }
 
         let showGap = activeSession.session.includes('RAC') ? '' : '<th>Gap to #1 / ahead</th>';
@@ -584,30 +654,32 @@ function Results(props) {
                             <div className={'loaded-view-info__columns__column'}>
                                 <div className={'loaded-view-info__columns__column__title'}>Track conditions</div>
                                 {activeType.type === 'Session' &&
-                                <Fade in={activeSessionData.track !== ''}>
                                     <Weather
                                         type={activeSessionData.track}
+                                        degrees={activeSessionData.air}
                                     />
-                                </Fade>
                                 }
                             </div>
                             <div className={'loaded-view-info__columns__column'}>
                                 <div className={'loaded-view-info__columns__column__title'}>Session best lap</div>
-                                <Fade in={activeSessionData.track !== ''}>
-                                    <div>1 min 33s</div>
-                                </Fade>
+                                <div>{activeSessionData.sessionBestLapRider}</div>
+                                <div>{activeSessionData.sessionBestLapTime}</div>
+                                <div>{activeSessionData.sessionBestLapSpeed}</div>
+                                <div>Lap: {activeSessionData.sessionBestLapLap}</div>
                             </div>
                             <div className={'loaded-view-info__columns__column'}>
                                 <div className={'loaded-view-info__columns__column__title'}>Best race lap of all time</div>
-                                <Fade in={activeSessionData.track !== ''}>
-                                    <div>1 min 55s</div>
-                                </Fade>
+                                <div>{activeSessionData.raceLapRecordRider}</div>
+                                <div>{activeSessionData.raceLapRecordLapTime}</div>
+                                <div>{activeSessionData.raceLapRecordSpeed}</div>
+                                <div>Year: {activeSessionData.raceLapRecordYear}</div>
                             </div>
                             <div className={'loaded-view-info__columns__column'}>
                                 <div className={'loaded-view-info__columns__column__title'}>Best lap of all time</div>
-                                <Fade in={activeSessionData.track !== ''}>
-                                    <div>1 min 44s</div>
-                                </Fade>
+                                <div>{activeSessionData.lapRecordRider}</div>
+                                <div>{activeSessionData.lapRecordLapTime}</div>
+                                <div>{activeSessionData.lapRecordSpeed}</div>
+                                <div>Year: {activeSessionData.lapRecordYear}</div>
                             </div>
                         </div>
                     }
