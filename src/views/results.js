@@ -478,7 +478,6 @@ function Results(props) {
     const buttonClick = async () => {
         setErrorStatus({status: false})
         activeType.type === 'Total standings' ? fetchResults() : fetchSession();
-        assignButtonStatus({clicked: true, loading: false})
         assignFilterStatus({changed: false})
     }
 
@@ -644,10 +643,16 @@ function Results(props) {
                 </div>
             </Fade>
             <Fade in={categoriesInFilter.length > 0}>
-                <button onClick={buttonClick}>Go</button>
+                <button onClick={buttonClick} className={button.loading === true ? 'loading' : ''}>
+                    <img className={'loader'} src={Loader} />
+                    <span>Go</span>
+                </button>
             </Fade>
-            <Fade in={categoriesInFilter.length > 0 && button.clicked && activeType.type === loadedSessionInfo.type}>
+            <Fade in={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type}>
                 <div className={'loaded-view-info'}>
+                    <Fade in={button.loading}>
+                        <div className={'loaded-view-info__blur'}></div>
+                    </Fade>
                     <div className={'loaded-view-info__text'}>{loadedSessionInfo.text}</div>
                     {activeType.type === 'Session' &&
                         <div className={'loaded-view-info__columns'}>
@@ -688,20 +693,26 @@ function Results(props) {
                     </Fade>
                 </div>
             </Fade>
-                    {loadedSessionInfo.type === 'Total standings' && activeType.type === 'Total standings' &&
-                        <table>
-                            <thead dangerouslySetInnerHTML={{__html: tableHeader}}>
-                            </thead>
-                            <tbody dangerouslySetInnerHTML={{__html: resultsTable}}></tbody>
-                        </table>
-                    }
-                    {loadedSessionInfo.type === 'Session' && activeType.type === 'Session' &&
-                        <table>
-                            <thead dangerouslySetInnerHTML={{__html: sessionTableHeader}}>
-                            </thead>
-                            <tbody dangerouslySetInnerHTML={{__html: sessionTable}}></tbody>
-                        </table>
-                    }
+            {loadedSessionInfo.type === 'Total standings' && activeType.type === 'Total standings' && !error.status &&
+                <table>
+                    <Fade in={button.loading}>
+                        <div className={'loaded-view-info__blur'}></div>
+                    </Fade>
+                    <thead dangerouslySetInnerHTML={{__html: tableHeader}}>
+                    </thead>
+                    <tbody dangerouslySetInnerHTML={{__html: resultsTable}}></tbody>
+                </table>
+            }
+            {loadedSessionInfo.type === 'Session' && activeType.type === 'Session' && !error.status &&
+                <table>
+                    <Fade in={button.loading}>
+                        <div className={'loaded-view-info__blur'}></div>
+                    </Fade>
+                    <thead dangerouslySetInnerHTML={{__html: sessionTableHeader}}>
+                    </thead>
+                    <tbody dangerouslySetInnerHTML={{__html: sessionTable}}></tbody>
+                </table>
+            }
         </div>
     </div>
 }
