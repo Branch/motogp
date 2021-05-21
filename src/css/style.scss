@@ -295,11 +295,89 @@ span.highlight {
     bottom: 4rem;
     left: 8rem;
     z-index: 10;
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    &:focus {
+      outline: none;
+    }
 
     &:hover {
       cursor: pointer;
       transition: all 0.2s linear;
-      color: rgba(255,255,255, 1);
+      color: $beige-light;
+    }
+
+    &__links {
+      position: absolute;
+      width: 0;
+      height: 70px;
+      background-color: $beige-light;
+      border-radius: 2rem;
+      top: -1rem;
+      left: -1rem;
+      opacity: 0;
+      transition: all 0.1s linear;
+      display: flex;
+      justify-content: space-evenly;
+      box-shadow: rgba(0, 0, 0, 0.18) 0 2px 4px;
+      
+      &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid $beige-light;
+        position: absolute;
+        left: -9px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+      }
+
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        opacity: 0.8;
+        transition: all 0.2s linear;
+
+        &:hover {
+          text-decoration: none !important;
+          opacity: 1;
+          transition: all 0.2s linear;
+        }
+
+        &.general {
+          color: rgba(0,0,0, 0.3);
+        }
+
+        &.twitter {
+          color: #5DA9DD;
+        }
+
+        &.facebook {
+          color: #4867AA;
+        }
+
+        &.reddit {
+          color: #FF4501;
+        }
+      }
+    }
+
+    &.active {
+      color: $beige-light;
+
+      .app-share__links {
+        transition: all 0.1s linear;
+        left: 4rem;
+        width: 300px;
+        opacity: 1;
+      }
     }
   }
 

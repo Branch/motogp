@@ -9,12 +9,18 @@ function Index(props) {
 
     const [menuClass, setMenuClass] = useState('')
     const [firstOffset, setFirstOffset] = useState(0)
+    const [showShareMenu, setShareMenuStatus] = useState(false)
 
 
     const menuClick = (e) => {
         let className = e.currentTarget.classList.contains('is-active') ? '' : 'is-active';
         setMenuClass(className);
     }
+
+    const shareToggler = () => {
+        setShareMenuStatus(!showShareMenu)
+    }
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -33,7 +39,15 @@ function Index(props) {
                     <span className="hamburger-inner"></span>
                 </span>
         </button>
-        <a className={'app-share'}><i className="fas fa-share-alt"></i></a>
+        <button onClick={shareToggler} className={showShareMenu === true ? 'app-share active' : 'app-share'}>
+            <i className="fas fa-share-alt"></i>
+            <div className={'app-share__links'}>
+                <a className={'facebook'} target={'_blank'} href={'https://www.facebook.com/sharer/sharer.php?u=http://stackoverflow.com'}><i className="fab fa-facebook-f"></i></a>
+                <a className={'twitter'} target={'_blank'} href={'https://twitter.com/intent/tweet?text=http://mywebsite'}><i className="fab fa-twitter"></i></a>
+                <a className={'reddit'} target={'_blank'} href={'https://www.reddit.com/submit?url=http://mywebsite'}><i className="fab fa-reddit"></i></a>
+                <a className={'general'} onClick={() => {navigator.clipboard.writeText(window.location.href)}}><i className="fas fa-link"></i></a>
+            </div>
+        </button>
         <a className={'app-contact'} href={"mailto:contact@domain.se"}><i className="fas fa-envelope"></i></a>
         <div className={'app-latest'}>
             <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
