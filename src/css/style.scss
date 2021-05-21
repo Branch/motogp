@@ -342,13 +342,12 @@ span.highlight {
         justify-content: center;
         align-items: center;
         font-size: 1.5rem;
-        opacity: 0.8;
-        transition: all 0.2s linear;
+        transition: all 0.1s linear;
 
         &:hover {
           text-decoration: none !important;
-          opacity: 1;
-          transition: all 0.2s linear;
+          opacity: 0.6;
+          transition: all 0.1s linear;
         }
 
         &.general {
