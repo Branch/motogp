@@ -10,6 +10,10 @@ function Index(props) {
     const [menuClass, setMenuClass] = useState('')
     const [firstOffset, setFirstOffset] = useState(0)
     const [showShareMenu, setShareMenuStatus] = useState(false)
+    const [latestRace, setLatestRace] = useState({
+        shortName: '',
+        fullName: ''
+    })
 
 
     const menuClick = (e) => {
@@ -21,15 +25,28 @@ function Index(props) {
         setShareMenuStatus(!showShareMenu)
     }
 
-
     useEffect(() => {
         const interval = setInterval(() => {
             if(firstOffset < 100) {
                 setFirstOffset(firstOffset + 1)
             }
-        }, 25);
-        return () => clearInterval(interval);
+        }, 25)
+        return () => clearInterval(interval)
     })
+
+    useEffect(() => {
+        getLatestRace();
+    })
+
+    const getLatestRace = async () => {
+        const results = await fetch(`/motogp/latest`);
+        const data = await results.json()
+        let html = window.document.createElement('html');
+        html.innerHTML = data.data
+        let shortName = html.getElementsByTagName('select')[1].options[html.getElementsByTagName('select')[1].selectedIndex].value
+
+        setLatestRace({shortName: shortName, fullName: 'test'})
+    }
 
 
 
@@ -60,7 +77,7 @@ function Index(props) {
                 <img src={Mugello} />
             </div>
             <div className={'app-latest-small'}>
-                Mugello
+                {latestRace.fullName}
             </div>
         </div>
         <svg className={'app-latest__race'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 520">
