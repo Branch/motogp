@@ -35,7 +35,9 @@ function Index(props) {
     })
 
     useEffect(() => {
-        getLatestRace();
+        if(firstOffset <= 0) {
+            getLatestRace();
+        }
     })
 
     const getLatestRace = async () => {
