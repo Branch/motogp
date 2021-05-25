@@ -648,9 +648,24 @@ span.highlight {
     padding: 10rem 0;
     position: relative;
     
-    img {
+    &__bg {
       position: absolute;
       top: -10rem;
+    }
+    
+    &__from {
+      position: absolute;
+      bottom: 1rem;
+      text-align: center;
+      font-size: 10px;
+      left: 0;
+      right: 0;
+      cursor: default;
+      
+      img {
+        width: 1rem;
+        margin-left: 2px;
+      }
     }
 
 
@@ -676,6 +691,14 @@ span.highlight {
         padding: 0;
         font-weight: 900;
         margin-bottom: 2rem;
+      }
+
+      a {
+        i {
+          position: absolute;
+          font-size: 10px;
+          right: -12px;
+        }
       }
     }
     &-links {
