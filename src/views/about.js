@@ -10,7 +10,7 @@ function About() {
                 About
             </h2>
             <p>
-                This site is a hobby of mine, meant to be an improvement of the results page that you can find on <a href={'https://www.motogp.com/en/Results+Statistics'} target={'_blank'}>motogp.com.<i className="fas fa-external-link-alt"></i></a>
+                This site is a hobby of mine, meant to be an improvement of the results page that you can find on <a href={'https://www.motogp.com/en/Results+Statistics'} target={'_blank'}>motogp.com<i className="fas fa-external-link-alt"></i></a>
             </p>
             <p>
                 Want to report a bug or just want to say hi? Send me an email and I'll try to get back to you as soon as possible.

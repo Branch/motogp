@@ -560,7 +560,7 @@ function Results(props) {
 
 
 
-    return <div className={'index-main-results'} ref={props.ref}>
+    return <div className={'index-main-results'} ref={props.refProp}>
         <div className={'index-main-results-inner container'}>
             <h2>
                 <Dropdown
@@ -642,12 +642,10 @@ function Results(props) {
                     <div className={'error-msg__later'}>Please change race or try again later.</div>
                 </div>
             </Fade>
-            <Fade in={categoriesInFilter.length > 0}>
                 <button onClick={buttonClick} className={button.loading === true ? 'loading' : ''}>
                     <img className={'loader'} src={Loader} />
                     <span>Go</span>
                 </button>
-            </Fade>
             <Fade in={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type}>
                 <div className={'loaded-view-info'}>
                     <Fade in={button.loading}>
