@@ -516,8 +516,6 @@ span.highlight {
 
       img {
         position: absolute;
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
         width: 20rem;
 
         &:first-of-type {
@@ -526,7 +524,7 @@ span.highlight {
         }
 
         &:last-of-type {
-          left: 2rem;
+          left: -2rem;
           z-index: 0;
           opacity: 0.2;
           blur: 8px;

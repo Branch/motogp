@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Marc from '../assets/images/marc-tint.png'
+import Marc from '../assets/images/fabio-tinted.png'
 import ScrollTo from "../components/scrollTo";
 import Mugello from "../assets/images/tracks/mugello2.png";
 
