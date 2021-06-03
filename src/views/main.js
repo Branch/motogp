@@ -1,7 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import Marc from '../assets/images/fabio-tinted.png'
 import ScrollTo from "../components/scrollTo";
-import Mugello from "../assets/images/tracks/mugello2.png";
+import Track from "../components/track";
+import lemans from "../assets/images/tracks/le-mans.svg";
+import mugello from "../assets/images/tracks/mugello.svg";
+import qatar from "../assets/images/tracks/qatar.svg";
+import jerez from "../assets/images/tracks/jerez.svg";
+import catalunya from "../assets/images/tracks/catalunya.svg";
+import saxen from "../assets/images/tracks/sachsenring.svg";
+import assen from "../assets/images/tracks/assen.svg";
+import redbull from "../assets/images/tracks/redbullring.svg";
+import silverstone from "../assets/images/tracks/silverstone.svg";
+import aragon from "../assets/images/tracks/aragon.svg";
+import misano from "../assets/images/tracks/misano.svg";
+import motegi from "../assets/images/tracks/motegi.svg";
+import chang from "../assets/images/tracks/chang.svg";
+import pa from "../assets/images/tracks/philip-island.svg";
+import sepang from "../assets/images/tracks/sepang.svg";
+import ricardo from "../assets/images/tracks/ricardo-tormo.svg";
+import argentina from "../assets/images/tracks/argentina.svg";
+import cota from "../assets/images/tracks/cota.svg";
 
 
 
@@ -46,8 +64,49 @@ function Index(props) {
         let html = window.document.createElement('html');
         html.innerHTML = data.data
         let shortName = html.getElementsByTagName('select')[1].options[html.getElementsByTagName('select')[1].selectedIndex].value
+        let fullName = '';
 
-        setLatestRace({shortName: shortName, fullName: 'test'})
+        shortName = 'AME'
+
+        if(shortName === 'FRA') {
+            fullName = 'Le mans';
+        } else if(shortName === 'ITA') {
+            fullName = 'Mugello';
+        } else if(shortName === 'QAT' || shortName === 'DOH') {
+            fullName = 'Qatar';
+        } else if(shortName === 'SPA') {
+            fullName = 'Jerez';
+        } else if(shortName === 'CAT') {
+            fullName = 'Catalunya';
+        } else if(shortName === 'GER') {
+            fullName = 'Sachsenring';
+        } else if(shortName === 'NED') {
+            fullName = 'Assen';
+        } else if(shortName === 'STY' || shortName === 'AUT') {
+            fullName = 'Red bull ring';
+        } else if(shortName === 'GBR') {
+            fullName = 'Silverstone';
+        } else if(shortName === 'ARA') {
+            fullName = 'Aragon';
+        } else if(shortName === 'RSM') {
+            fullName = 'Misano';
+        } else if(shortName === 'JPN') {
+            fullName = 'Motegi';
+        } else if(shortName === 'THA') {
+            fullName = 'Chang';
+        } else if(shortName === 'AUS') {
+            fullName = 'Phillip Island';
+        } else if(shortName === 'MAL') {
+            fullName = 'Sepang';
+        } else if(shortName === 'VAL') {
+            fullName = 'Valencia';
+        } else if(shortName === 'ARG') {
+            fullName = 'Argentina';
+        } else if(shortName === 'AME') {
+            fullName = 'COTA';
+        }
+
+        setLatestRace({shortName: shortName, fullName: fullName})
     }
 
 
@@ -76,7 +135,9 @@ function Index(props) {
                 Latest race
             </div>
             <div className={'app-latest-track'}>
-                <img src={Mugello} />
+                <Track
+                    track={latestRace.shortName}
+                />
             </div>
             <div className={'app-latest-small'}>
                 {latestRace.fullName}

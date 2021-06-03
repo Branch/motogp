@@ -415,8 +415,8 @@ span.highlight {
   }
 
   &-latest {
-    color: $beige;
-    padding: 0.5rem 2rem;
+    color: #fff;
+    padding: 0.2rem 2rem;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -451,7 +451,23 @@ span.highlight {
 
     &-track {
       img {
-        width: 3rem;
+        width: 2rem;
+        background-color: #fff;
+        margin: 0 0 5px 0;
+
+        &.shadow {
+          -webkit-box-shadow: inset 0px 0px 0px 1px $orange !important;
+          -moz-box-shadow: inset 0px 0px 0px 1px $orange !important;
+          box-shadow: inset 0px 0px 0px 1px $orange !important;
+        }
+
+        &.medium {
+          width: 3rem;
+        }
+
+        &.large {
+          width: 4rem;
+        }
       }
     }
 
