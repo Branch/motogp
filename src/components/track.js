@@ -20,41 +20,41 @@ import sepang from '../assets/images/tracks/sepang.svg';
 
 const Track = (props) => {
     if(props.track === 'FRA') {
-        return <img className={'medium shadow'} src={lemans} />;
+        return <img alt='track' className={'medium shadow'} src={lemans} />;
     } else if(props.track === 'ITA') {
-        return <img className={'medium shadow'} src={mugello} />;
+        return <img alt='track' className={'medium shadow'} src={mugello} />;
     } else if(props.track === 'QAT' || props.track === 'DOH') {
-        return <img className={'medium shadow'} src={qatar} />;
+        return <img alt='track' className={'medium shadow'} src={qatar} />;
     } else if(props.track === 'SPA') {
-        return <img src={jerez} />;
+        return <img alt='track' src={jerez} />;
     } else if(props.track === 'CAT') {
-        return <img className={'large'} src={catalunya} />;
+        return <img alt='track' className={'large'} src={catalunya} />;
     } else if(props.track === 'GER') {
-        return <img className={'large shadow'} src={saxen} />;
+        return <img alt='track' className={'large shadow'} src={saxen} />;
     } else if(props.track === 'NED') {
-        return <img className={'medium'} src={assen} />;
+        return <img alt='track' className={'medium'} src={assen} />;
     } else if(props.track === 'STY' || props.track === 'AUT') {
-        return <img className={'large shadow'} src={redbull} />;
+        return <img alt='track' className={'large shadow'} src={redbull} />;
     } else if(props.track === 'GBR') {
-        return <img src={silverstone} />;
+        return <img alt='track' src={silverstone} />;
     } else if(props.track === 'ARA') {
-        return <img className={'medium shadow'} src={aragon} />;
+        return <img alt='track' className={'medium shadow'} src={aragon} />;
     } else if(props.track === 'RSM') {
-        return <img className={'large shadow'} src={misano} />;
+        return <img alt='track' className={'large shadow'} src={misano} />;
     } else if(props.track === 'JPN') {
-        return <img className={'medium shadow'} src={motegi} />;
+        return <img alt='track' className={'medium shadow'} src={motegi} />;
     } else if(props.track === 'THA') {
-        return <img className={'large'} src={chang} />;
+        return <img alt='track' className={'large'} src={chang} />;
     } else if(props.track === 'AUS') {
-        return <img className={'large shadow'} src={pa} />;
+        return <img alt='track' className={'large shadow'} src={pa} />;
     } else if(props.track === 'MAL') {
-        return <img className={'medium shadow'} src={sepang} />;
+        return <img alt='track' className={'medium shadow'} src={sepang} />;
     } else if(props.track === 'VAL') {
-        return <img className={'large shadow'} src={ricardo} />;
+        return <img alt='track' className={'large shadow'} src={ricardo} />;
     } else if(props.track === 'ARG') {
-        return <img className={'medium shadow'} src={argentina} />;
+        return <img alt='track' className={'medium shadow'} src={argentina} />;
     } else if(props.track === 'AME') {
-        return <img className={'medium shadow'} src={cota} />;
+        return <img alt='track' className={'medium shadow'} src={cota} />;
     }
     return null;
 }

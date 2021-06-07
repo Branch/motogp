@@ -337,6 +337,15 @@ span.highlight {
         margin: auto;
       }
 
+      button {
+        &.general {
+          color: rgba(0,0,0, 0.3);
+          outline: none;
+          border: none;
+          background-color: transparent;
+        }
+      }
+
       a {
         display: flex;
         justify-content: center;
@@ -348,10 +357,6 @@ span.highlight {
           text-decoration: none !important;
           opacity: 0.6;
           transition: all 0.1s linear;
-        }
-
-        &.general {
-          color: rgba(0,0,0, 0.3);
         }
 
         &.twitter {

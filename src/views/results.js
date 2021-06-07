@@ -12,6 +12,7 @@ function Results(props) {
         dropdownOpen: false
     })
     const [button, assignButtonStatus] = useState({
+        disabled: false,
         clicked: false,
         loading: false,
     })
@@ -26,7 +27,9 @@ function Results(props) {
     const [activeRace, assignRace] = useState({
         race: '',
         raceName: '',
-        dropdownOpen: false
+        dropdownOpen: false,
+        prevRace: '',
+        prevRacename: ''
     })
 
     const [activeCategory, assignCategory] = useState({
@@ -91,130 +94,6 @@ function Results(props) {
         assignLoadedSessionInfo({text: text, visible: true, type: activeType.type})
     }
 
-    const setYears = async () => {
-        let years = [];
-
-        for(let i = new Date().getFullYear(); i >= 2012; i--) {
-            years.push(i)
-        }
-        let elements = years.map((year) =>
-            <div onClick={() => yearClick(year)}>{year}</div>
-        )
-        assignYears(elements)
-    }
-
-    const fetchRaces = async () => {
-
-        setLoadingRaces(true)
-
-        const results = await fetch(`/motogp/races?` + new URLSearchParams({
-            year: activeYear.year
-        }))
-        const data = await results.json();
-
-        setLoadingRaces(false)
-
-        let races = JSON.parse(data.data)
-
-        let raceElements = []
-        let firstRace = '';
-        let firstRaceName = '';
-
-        let first = true;
-        let race = {}
-        for (let key of Object.keys(races)) {
-            race = {}
-            if(first) {
-                firstRace = races[key].shortname;
-                firstRaceName = races[key].title;
-            }
-            race.race = races[key].shortname
-            race.raceName = races[key].title
-            raceElements.push(race)
-            first = false;
-        }
-
-        let elements = raceElements.map((race) =>
-            <div onClick={() => raceClick(race.race, race.raceName)}>{race.raceName}</div>
-        )
-        assignRaces(elements)
-
-        // Set active race when loading view
-        assignRace({race:firstRace, raceName:firstRaceName, dropdownOpen: false})
-
-    }
-
-    const fetchCategories  = async () => {
-        setLoadingCategories(true);
-        const results = await fetch(`/motogp/categories?` + new URLSearchParams({
-            year: activeYear.year,
-            race: activeRace.race
-        }))
-        const data = await results.json();
-        setLoadingCategories(false);
-        let categories = JSON.parse(data.data)
-
-        if(categories.length <= 0) {
-            setErrorStatus({status: true})
-        } else if(error.status === true) {
-            setErrorStatus({status: false})
-        }
-
-        let raceElements = []
-        let first = true
-        let firstCategory = ''
-        for (let key of Object.keys(categories)) {
-            if(first) {
-                firstCategory = categories[key].name
-            }
-            raceElements.push(categories[key].name)
-            first = false
-        }
-
-        let elements = raceElements.map((race) =>
-            <div onClick={() => categoryClick(race)}>{race}</div>
-        )
-        assignCategories(elements)
-
-        assignCategory({category:firstCategory, dropdownOpen: false})
-
-    }
-
-    const fetchSessions  = async () => {
-        setLoadingSessions(true);
-        const results = await fetch(`/motogp/sessions?` + new URLSearchParams({
-            year: activeYear.year,
-            race: activeRace.race,
-            category: activeCategory.category,
-        }))
-
-        const data = await results.json();
-        setLoadingSessions(false);
-        let sessions = JSON.parse(data.data)
-
-        if(sessions == null) {
-            return;
-        }
-
-        let raceElements = []
-        let first = true
-        let firstSession = ''
-        for (let key of Object.keys(sessions)) {
-            if(first) {
-                firstSession = sessions[key].name
-            }
-            raceElements.push(sessions[key].name)
-            first = false
-        }
-
-        let elements = raceElements.map((race) =>
-            <div onClick={() => sessionClick(race)}>{race}</div>
-        )
-        assignSessions(elements)
-        assignSession({session:firstSession, dropdownOpen: false})
-
-    }
-
     const yearClick = async (year) => {
         assignYear({year:year, dropdownOpen: false})
     }
@@ -224,7 +103,8 @@ function Results(props) {
     }
 
     const categoryClick = async (category) => {
-        assignCategory({category:category, dropdownOpen: false})
+        let prevCategory = activeCategory.category;
+        assignCategory({category:category, dropdownOpen: false, prev: prevCategory})
     }
 
     const sessionClick = async (session) => {
@@ -237,7 +117,7 @@ function Results(props) {
 
     // Total standings
     const fetchResults = async () => {
-        assignButtonStatus({clicked: true, loading: true})
+        assignButtonStatus({clicked: true, loading: true, disabled: true})
 
         fetch(`/motogp/standings?` + new URLSearchParams({
             year: activeYear.year,
@@ -323,14 +203,14 @@ function Results(props) {
                     '                    </tr>';
                 setResultsTable(newResultsTable)
                 setTableHeader(tableHeader)
-                assignButtonStatus({clicked: true, loading: false})
+                assignButtonStatus({clicked: true, loading: false, disabled: false})
                 setLoadedRaceInfo();
             })
 
     }
 
     const fetchSession = async () => {
-        assignButtonStatus({clicked: true, loading: true})
+        assignButtonStatus({clicked: true, loading: true, disabled: true})
         const results = await fetch(`/motogp/session?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
@@ -348,8 +228,6 @@ function Results(props) {
         let sessionWeatherInfo = html.getElementsByClassName('padright10')[1].innerText.split(' ')[1];
         let rowCounter = 0;
         let newResultsTable = '';
-
-        let sessionInfoRowCounter = 0;
         let poleLapInfo = '';
 
         let sessionBestLapLap = '';
@@ -438,10 +316,10 @@ function Results(props) {
                 }
 
                 // Country flag
-                if(activeSession.session.includes('RAC') && cellCounter === 4 || !activeSession.session.includes('RAC') && cellCounter === 3) {
+                if((activeSession.session.includes('RAC') && cellCounter === 4) || (!activeSession.session.includes('RAC') && cellCounter === 3)) {
                     let country = Country(val);
 
-                    newResultsTable += `<td><img class='country-flag' src='https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/${country}.svg' /></td>`
+                    newResultsTable += `<td><img alt="country" class='country-flag' src='https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/${country}.svg' /></td>`
                     cellCounter++;
                     continue;
                 }
@@ -471,7 +349,7 @@ function Results(props) {
             '                    </tr>';
         setSessionTable(newResultsTable)
         setSessionTableHeader(tableHeader)
-        assignButtonStatus({clicked: true, loading: false})
+        assignButtonStatus({clicked: true, loading: false, disabled: false})
         setLoadedRaceInfo();
     }
 
@@ -481,37 +359,167 @@ function Results(props) {
         assignFilterStatus({changed: false})
     }
 
-    // Use useEffect to call setYears() on initial render
+    const fetchSessions = async () => {
+        setLoadingSessions(true);
+        const results = await fetch(`/motogp/sessions?` + new URLSearchParams({
+            year: activeYear.year,
+            race: activeRace.race,
+            category: activeCategory.category,
+        }))
+
+        const data = await results.json();
+        setLoadingSessions(false);
+        let sessions = JSON.parse(data.data)
+
+        if(sessions == null) {
+            let elements = <div>No session available</div>
+            assignSessions(elements)
+            assignSession({session:'No session available', dropdownOpen: false})
+            assignButtonStatus({clicked: false, loading: false, disabled: true})
+            return;
+        }
+
+        let raceElements = []
+        let first = true
+        let firstSession = ''
+        for (let key of Object.keys(sessions)) {
+            if(first) {
+                firstSession = sessions[key].name
+            }
+            raceElements.push(sessions[key].name)
+            first = false
+        }
+
+        let elements = raceElements.map((race) =>
+            <div onClick={() => sessionClick(race)}>{race}</div>
+        )
+        assignSessions(elements)
+        assignSession({session:firstSession, dropdownOpen: false})
+        assignButtonStatus({clicked: false, loading: false, disabled: false})
+
+    }
+
+    const fetchCategories = async () => {
+        setLoadingCategories(true);
+        const results = await fetch(`/motogp/categories?` + new URLSearchParams({
+            year: activeYear.year,
+            race: activeRace.race
+        }))
+        const data = await results.json();
+        setLoadingCategories(false);
+        let categories = JSON.parse(data.data)
+
+        if(categories.length <= 0) {
+            setErrorStatus({status: true})
+        } else if(error.status === true) {
+            setErrorStatus({status: false})
+        }
+
+        let raceElements = []
+        let first = true
+        let firstCategory = ''
+        for (let key of Object.keys(categories)) {
+            if(first) {
+                firstCategory = categories[key].name
+            }
+            raceElements.push(categories[key].name)
+            first = false
+        }
+
+        let elements = raceElements.map((race) =>
+            <div onClick={() => categoryClick(race)}>{race}</div>
+        )
+        assignCategories(elements)
+
+        assignCategory({category:firstCategory, dropdownOpen: false, prev: activeCategory.prev})
+
+    }
+
     useEffect(() => {
-        setYears()
+        const setYears = () => {
+            let years = [];
+
+            for(let i = new Date().getFullYear(); i >= 2012; i--) {
+                years.push(i)
+            }
+            let elements = years.map((year) =>
+                <div onClick={() => yearClick(year)}>{year}</div>
+            )
+            assignYears(elements)
+        }
+        setYears();
     }, [])
 
     useEffect(() => {
-        fetchRaces()
+        const fetchRaces = async () => {
+
+            setLoadingRaces(true)
+
+            const results = await fetch(`/motogp/races?` + new URLSearchParams({
+                year: activeYear.year
+            }))
+            const data = await results.json();
+
+            setLoadingRaces(false)
+
+            let races = JSON.parse(data.data)
+
+            let raceElements = []
+            let firstRace = '';
+            let firstRaceName = '';
+
+            let first = true;
+            let race = {}
+            for (let key of Object.keys(races)) {
+                race = {}
+                if(first) {
+                    firstRace = races[key].shortname;
+                    firstRaceName = races[key].title;
+                }
+                race.race = races[key].shortname
+                race.raceName = races[key].title
+                raceElements.push(race)
+                first = false;
+            }
+
+            let elements = raceElements.map((race) =>
+                <div onClick={() => raceClick(race.race, race.raceName)}>{race.raceName}</div>
+            )
+            assignRaces(elements)
+
+            // Set active race when loading view
+            assignRace({race:firstRace, raceName:firstRaceName, dropdownOpen: false})
+
+        }
+        fetchRaces();
     }, [activeYear.year])
 
     useEffect(() => {
         if(activeRace.race !== undefined && activeRace.race !== '') {
             fetchCategories()
         }
-        if(activeCategory.category !== undefined && activeCategory.category !== ''  && activeRace.race !== undefined && activeRace.race !== '') {
+
+        if(activeCategory.category !== undefined && activeCategory.category !== '' && activeRace.race !== undefined && activeRace.race !== '') {
             fetchSessions()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRace.raceName])
 
     useEffect(() => {
         if(activeCategory.category !== undefined && activeCategory.category !== '' && activeRace.race !== undefined && activeRace.race !== '') {
             fetchSessions()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeCategory.category])
 
     useEffect(() => {
         if(activeRace.dropdownOpen === true) {
-            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignCategory({category:activeCategory.category, dropdownOpen: false, prev: activeCategory.prev})
             assignYear({year:activeYear.year, dropdownOpen: false})
             assignType({type:activeType.type, dropdownOpen: false})
             assignSession({session:activeSession.session, dropdownOpen: false})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRace.dropdownOpen])
 
     useEffect(() => {
@@ -521,44 +529,45 @@ function Results(props) {
             assignType({type:activeType.type, dropdownOpen: false})
             assignSession({session:activeSession.session, dropdownOpen: false})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeCategory.dropdownOpen])
 
     useEffect(() => {
         if(activeType.dropdownOpen === true) {
-            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignCategory({category:activeCategory.category, dropdownOpen: false, prev: activeCategory.prev})
             assignYear({year:activeYear.year, dropdownOpen: false})
             assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
             assignSession({session:activeSession.session, dropdownOpen: false})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeType.dropdownOpen])
 
     useEffect(() => {
         if(activeSession.dropdownOpen === true) {
-            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignCategory({category:activeCategory.category, dropdownOpen: false, prev: activeCategory.prev})
             assignYear({year:activeYear.year, dropdownOpen: false})
             assignType({type:activeType.type, dropdownOpen: false})
             assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeSession.dropdownOpen])
 
     useEffect(() => {
         if(activeYear.dropdownOpen === true) {
-            assignCategory({category:activeCategory.category, dropdownOpen: false})
+            assignCategory({category:activeCategory.category, dropdownOpen: false, prev: activeCategory.prev})
             assignSession({session:activeSession.session, dropdownOpen: false})
             assignType({type:activeType.type, dropdownOpen: false})
             assignRace({race:activeRace.race, raceName:activeRace.raceName, dropdownOpen: false})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeYear.dropdownOpen])
 
     useEffect(() => {
         if(button.clicked === true) {
             assignFilterStatus({changed: true})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeSession.session, activeYear.year, activeCategory.category, activeRace.race, activeType.type])
-
-
-
-
 
     return <div className={'index-main-results'} ref={props.refProp}>
         <div className={'index-main-results-inner container'}>
@@ -575,7 +584,7 @@ function Results(props) {
             <div className={'index-main-results-inner__filters'}>
                 <div className={'index-main-results-inner__filters__filter active'}>
                     {loadingRaces === true &&
-                        <img className={'loader'} src={Loader} />
+                        <img alt={'loader'} className={'loader'} src={Loader} />
                     }
                     {loadingRaces === false &&
                         <Dropdown
@@ -590,14 +599,14 @@ function Results(props) {
                 {categoriesInFilter.length > 0 &&
                     <div className={'index-main-results-inner__filters__filter active'}>
                         {loadingCategories === true &&
-                        <img className={'loader'} src={Loader} />
+                        <img alt={'loader'} className={'loader'} src={Loader} />
                         }
                         {loadingCategories === false &&
                         <Dropdown
                             class = {'categories'}
                             noOfCategories={categoriesInFilter.length}
                             activeItem={activeCategory.category}
-                            onActiveClick = {() => assignCategory({category:activeCategory.category, dropdownOpen: activeCategory.dropdownOpen !== true})}
+                            onActiveClick = {() => assignCategory({category:activeCategory.category, dropdownOpen: activeCategory.dropdownOpen !== true, prev: activeCategory.prev})}
                             listItems = {categoriesInFilter}
                             isOpen={activeCategory.dropdownOpen}
                         />
@@ -607,7 +616,7 @@ function Results(props) {
                 {categoriesInFilter.length > 0 &&
                     <div className={'index-main-results-inner__filters__filter active'}>
                         {loadingSessions === true &&
-                        <img className={'loader'} src={Loader} />
+                        <img alt={'loader'} className={'loader'} src={Loader} />
                         }
                         {loadingSessions === false &&
                         <Dropdown
@@ -642,10 +651,12 @@ function Results(props) {
                     <div className={'error-msg__later'}>Please change race or try again later.</div>
                 </div>
             </Fade>
-                <button onClick={buttonClick} className={button.loading === true ? 'loading' : ''}>
-                    <img className={'loader'} src={Loader} />
+            {!error.status &&
+                <button onClick={buttonClick} disabled={button.disabled} className={button.loading === true ? 'loading' : ''}>
+                    <img alt={'loader'} className={'loader'} src={Loader} />
                     <span>Go</span>
                 </button>
+            }
             <Fade in={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type}>
                 <div className={'loaded-view-info'}>
                     <Fade in={button.loading}>

@@ -6,14 +6,14 @@ const Weather = (props) => {
     if(props.type === 'Dry') {
         return (
             <div>
-                <img src={Sun} />
+                <img alt={'sun'} src={Sun} />
                 {props.degrees} C
             </div>
         )
     } else if(props.type === 'Wet') {
         return (
             <div>
-                <img src={Rain} />
+                <img alt={'wet'} src={Rain} />
                 {props.degrees} C
             </div>
         )

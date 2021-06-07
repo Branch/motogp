@@ -2,27 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Marc from '../assets/images/fabio-tinted.png'
 import ScrollTo from "../components/scrollTo";
 import Track from "../components/track";
-import lemans from "../assets/images/tracks/le-mans.svg";
-import mugello from "../assets/images/tracks/mugello.svg";
-import qatar from "../assets/images/tracks/qatar.svg";
-import jerez from "../assets/images/tracks/jerez.svg";
-import catalunya from "../assets/images/tracks/catalunya.svg";
-import saxen from "../assets/images/tracks/sachsenring.svg";
-import assen from "../assets/images/tracks/assen.svg";
-import redbull from "../assets/images/tracks/redbullring.svg";
-import silverstone from "../assets/images/tracks/silverstone.svg";
-import aragon from "../assets/images/tracks/aragon.svg";
-import misano from "../assets/images/tracks/misano.svg";
-import motegi from "../assets/images/tracks/motegi.svg";
-import chang from "../assets/images/tracks/chang.svg";
-import pa from "../assets/images/tracks/philip-island.svg";
-import sepang from "../assets/images/tracks/sepang.svg";
-import ricardo from "../assets/images/tracks/ricardo-tormo.svg";
-import argentina from "../assets/images/tracks/argentina.svg";
-import cota from "../assets/images/tracks/cota.svg";
-
-
-
 function Index(props) {
 
     const [menuClass, setMenuClass] = useState('')
@@ -65,8 +44,6 @@ function Index(props) {
         html.innerHTML = data.data
         let shortName = html.getElementsByTagName('select')[1].options[html.getElementsByTagName('select')[1].selectedIndex].value
         let fullName = '';
-
-        shortName = 'AME'
 
         if(shortName === 'FRA') {
             fullName = 'Le mans';
@@ -120,10 +97,10 @@ function Index(props) {
         <button onClick={shareToggler} className={showShareMenu === true ? 'app-share active' : 'app-share'}>
             <i className="fas fa-share-alt"></i>
             <div className={'app-share__links'}>
-                <a className={'facebook'} target={'_blank'} href={'https://www.facebook.com/sharer/sharer.php?u=http://stackoverflow.com'}><i className="fab fa-facebook-f"></i></a>
-                <a className={'twitter'} target={'_blank'} href={'https://twitter.com/intent/tweet?text=http://mywebsite'}><i className="fab fa-twitter"></i></a>
-                <a className={'reddit'} target={'_blank'} href={'https://www.reddit.com/submit?url=http://mywebsite'}><i className="fab fa-reddit"></i></a>
-                <a className={'general'} onClick={() => {navigator.clipboard.writeText(window.location.href)}}><i className="fas fa-link"></i></a>
+                <a className={'facebook'} rel="noopener noreferrer" target={'_blank'} href={'https://www.facebook.com/sharer/sharer.php?u=http://stackoverflow.com'}><i className="fab fa-facebook-f"></i></a>
+                <a className={'twitter'} rel="noopener noreferrer" target={'_blank'} href={'https://twitter.com/intent/tweet?text=http://mywebsite'}><i className="fab fa-twitter"></i></a>
+                <a className={'reddit'} rel="noopener noreferrer" target={'_blank'} href={'https://www.reddit.com/submit?url=http://mywebsite'}><i className="fab fa-reddit"></i></a>
+                <button className={'general'} rel="noopener noreferrer" onClick={() => {navigator.clipboard.writeText(window.location.href)}}><i className="fas fa-link"></i></button>
             </div>
         </button>
         <a className={'app-contact'} href={"mailto:contact@domain.se"}><i className="fas fa-envelope"></i></a>
@@ -179,8 +156,8 @@ function Index(props) {
                     <p>This site is meant to show results from MotoGP in a simple and accessible way.<br />Note that this site is a hobby of mine and is<span className={'highlight'}> not affiliated with MotoGP / Dorna.</span></p>
                 </div>
                 <div className={'index-main-title-images'}>
-                    <img src={Marc} />
-                    <img src={Marc} />
+                    <img alt={'fabio'} src={Marc} />
+                    <img alt={'fabio'} src={Marc} />
                 </div>
             </div>
         </div>
