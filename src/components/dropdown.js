@@ -7,8 +7,7 @@ const Dropdown = (props) => {
         return (
             <div className={'dropdown__container'}>
                 <div onClick={props.onActiveClick} className={'dropdown__container__active'}>
-                    <FontAwesomeIcon icon={faSortDown} />
-                    {props.activeItem}</div>
+                    <span>{props.activeItem}<FontAwesomeIcon icon={faSortDown} /></span></div>
                 <div className={`dropdown__container__${props.class} ${props.isOpen === true ? 'open' : ''}`}>
                     {props.listItems}
                 </div>

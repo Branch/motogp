@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Marc from '../assets/images/fabio-tinted.png'
+import Bg from '../assets/images/mobile-bg.svg'
 import ScrollTo from "../components/scrollTo";
 import Track from "../components/track";
 function Index(props) {
@@ -88,6 +89,7 @@ function Index(props) {
 
 
     return <div className={'index-main'} ref={props.refProp}>
+        <img className={'mobile-bg'} src={Bg} />
         <button onClick={props.openSidebar} className={"hamburger"} type="button">
                 <span className="hamburger-box">
                     <span className="hamburger-inner"></span>
@@ -119,6 +121,7 @@ function Index(props) {
                 {latestRace.fullName}
             </div>
         </div>
+
         <svg className={'app-latest__race'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 650">
             <linearGradient id="grad-bottom" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset={firstOffset + "%"} />

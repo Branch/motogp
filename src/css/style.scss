@@ -57,7 +57,7 @@ h6,
   background-color: $orange;
   color: #fff;
   z-index: 6;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   height: 100%;
@@ -78,7 +78,19 @@ h6,
 
   &.active {
     transition: all 0.05s linear;
-    width: 20vw;
+    width: 100vw;
+
+    @include media-breakpoint-up(sm) {
+      width: 60vw;
+    }
+
+    @include media-breakpoint-up(md) {
+      width: 40vw;
+    }
+    
+    @include media-breakpoint-up(xl) {
+      width: 30vw;
+    }
 
     ul {
       position: fixed;
@@ -95,10 +107,15 @@ h6,
       outline: none;
       background-color: transparent;
       color: #fff;
-      position: fixed;
+      position: absolute;
       font-size: 2rem;
-      top: 3rem;
-      left: 20rem;
+      top: 1rem;
+      right: 1rem;
+
+      @include media-breakpoint-up(md) {
+        top: 3rem;
+        right: 3rem;
+      }
 
       i {
         text-decoration: none;
@@ -136,8 +153,13 @@ h6,
 .loaded-view-info {
   background-color: #fff;
   position: relative;
-  padding: 1rem;
-  margin-bottom: 3rem;
+  height: 0;
+
+  &.active {
+    height: auto;
+    padding: 1rem;
+    margin-bottom: 3rem;
+  }
 
   .filters-changed-notice {
     position: absolute;
@@ -154,14 +176,30 @@ h6,
   &__text {
     font-weight: bold;
     font-size: 2rem;
+    padding: 1rem 0;
+
+    @include media-breakpoint-up(md) {
+      padding: 0;
+    }
   }
 
   &__columns {
     display: flex;
     justify-content: space-around;
     margin-top: 2rem;
+    flex-direction: column;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+    }
     
     &__column {
+      padding: 1rem 0;
+
+      @include media-breakpoint-up(md) {
+        padding: 0;
+      }
+      
       &__title {
         font-weight: bold;
       }
@@ -189,10 +227,10 @@ h6,
     &__active {
       position: relative;
       cursor: pointer;
-      padding-right: 4rem;
-      padding-left: 1rem;
       transition: all 0.2s linear;
       font-weight: bold;
+      padding: 0;
+      font-size: 1.2rem;
 
       &:hover {
         transition: all 0.2s linear;
@@ -204,11 +242,15 @@ h6,
         }
       }
 
+      @include media-breakpoint-up(md) {
+        padding: 0 4rem 0 1rem;
+        font-size: 1rem;
+      }
+
       svg {
-        top: 0;
-        right: 1.8rem;
-        width: 2rem !important;
-        z-index: 999 !important;
+        position: relative !important;
+        z-index: 1 !important;
+        margin: 0 0 0.2rem 0.3rem;
       }
     }
 
@@ -246,6 +288,30 @@ h6,
         }
       }
     }
+    
+    &__races {
+      width: 280px;
+
+      @include media-breakpoint-up(md) {
+        width: auto;
+      }
+    }
+    
+    &__numbers {
+      position: absolute;
+      width: 250px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      line-height: normal;
+
+      @include media-breakpoint-up(md) {
+        width: auto;
+        margin: 0;
+        left: unset;
+        right: unset;
+      }
+    }
 
     &__races,
     &__numbers {
@@ -265,9 +331,21 @@ span.highlight {
   padding: 0;
   position: absolute;
   top: 4rem;
-  left: 8rem;
+  left: 1rem;
   z-index: 4;
   outline: none !important;
+
+  @include media-breakpoint-up(sm) {
+    left: 3rem;
+  }
+
+  @include media-breakpoint-up(lg) {
+    left: 6rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    left: 8rem;
+  }
 
   .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
     background-color: rgba(255,255,255, 0.6);
@@ -359,11 +437,23 @@ span.highlight {
     transition: all 0.2s linear;
     font-size: 1.5rem;
     bottom: 4rem;
-    left: 8rem;
+    left: 1rem;
     z-index: 4;
     background-color: transparent;
     border: none;
     outline: none;
+
+    @include media-breakpoint-up(sm) {
+      left: 3rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      left: 6rem;
+    }
+
+    @include media-breakpoint-up(xl) {
+      left: 8rem;
+    }
 
     &:focus {
       outline: none;
@@ -457,8 +547,20 @@ span.highlight {
     transition: all 0.2s linear;
     font-size: 1.5rem;
     bottom: 4rem;
-    right: 8rem;
+    right: 1rem;
     z-index: 4;
+
+    @include media-breakpoint-up(sm) {
+      right: 3rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      right: 6rem;
+    }
+
+    @include media-breakpoint-up(xl) {
+      right: 8rem;
+    }
 
     &:hover {
       cursor: pointer;
@@ -467,39 +569,38 @@ span.highlight {
     }
   }
 
-  svg {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    z-index: -1;
-
-    stop {
-      &:first-of-type {
-        stop-color: $green-dark;
-        stop-opacity:1;
-      }
-      &:last-of-type {
-        stop-color:$green-light;
-        stop-opacity:1;
-      }
-    }
-  }
-
   &-latest {
     color: #fff;
-    padding: 0.2rem 2rem;
-    display: flex;
     flex-direction: column;
     position: absolute;
     top: 4rem;
-    right: 8rem;
+    right: 1rem;
     z-index: 4;
     align-items: center;
+    display: flex;
+    padding: 0;
+
+    @include media-breakpoint-up(sm) {
+      right: 3rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      right: 6rem;
+    }
+
+    @include media-breakpoint-up(xl) {
+      right: 8rem;
+      padding: 0.2rem 2rem;
+    }
 
     svg {
       top: -.5rem;
       transform: scale(2);
-      width: 78%;
+      width: 60% !important;
+
+      @media screen and (min-width: 1440px) {
+        width: 78% !important;
+      }
 
       path{
         d:path('M37.5,186c-12.1-10.5-11.8-32.3-7.2-46.7c4.8-15,13.1-17.8,30.1-36.7C91,68.8,83.5,56.7,103.4,45 c22.2-13.1,51.1-9.5,69.6-1.6c18.1,7.8,15.7,15.3,43.3,33.2c28.8,18.8,37.2,14.3,46.7,27.9c15.6,22.3,6.4,53.3,4.4,60.2 c-3.3,11.2-7.1,23.9-18.5,32c-16.3,11.5-29.5,0.7-48.6,11c-16.2,8.7-12.6,19.7-28.2,33.2c-22.7,19.7-63.8,25.7-79.9,9.7 c-15.2-15.1,0.3-41.7-16.6-54.9C63,186,49.7,196.7,37.5,186z');
@@ -517,14 +618,19 @@ span.highlight {
       }
     }
 
-    &-top {
-    }
-
     &-track {
       img {
         width: 2rem;
         background-color: #fff;
         margin: 0 0 5px 0;
+
+        @include media-breakpoint-up(xl) {
+          display: none;
+        }
+
+        @media screen and (min-width: 1440px) {
+          display: block;
+        }
 
         &.shadow {
           -webkit-box-shadow: inset 0px 0px 0px 1px $orange !important;
@@ -537,7 +643,11 @@ span.highlight {
         }
 
         &.large {
-          width: 4rem;
+          width: 3rem;
+
+          @media screen and (min-width: 1440px) {
+            width: 4rem;
+          }
         }
       }
     }
@@ -574,21 +684,69 @@ span.highlight {
 .index-main {
   position: relative;
 
+  .mobile-bg {
+    position: absolute;
+    width: 100%;
+    transform: scale(5);
+
+    @include media-breakpoint-up(lg) {
+      display: none;
+    }
+  }
+
+  svg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
+    display: none;
+
+    @include media-breakpoint-up(lg) {
+      display: block;
+    }
+
+    stop {
+      &:first-of-type {
+        stop-color: $green-dark;
+        stop-opacity:1;
+      }
+      &:last-of-type {
+        stop-color:$green-light;
+        stop-opacity:1;
+      }
+    }
+  }
+
   &-title {
     display: flex;
     align-items: center;
     height: 100vh;
 
     &-text {
-      padding: 0 0 0 5rem;
-      width: 70%;
+      @include media-breakpoint-up(sm) {
+        width: 70%;
+      }
+
+      @include media-breakpoint-up(lg) {
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 2rem;
+      }
+
+      @media screen and (min-width: 1440px) {
+        background-color: unset;
+        padding: 0 0 0 5rem;
+      }
 
       h1 {
-        font-size: 5rem;
+        font-size: 4rem;
         margin: 0;
         line-height: 1;
         padding: 0;
         font-weight: 900;
+
+        @include media-breakpoint-up(xl) {
+          font-size: 5rem;
+        }
       }
     }
 
@@ -598,12 +756,20 @@ span.highlight {
       position: relative;
       width: 50%;
       height: 100%;
-      display: flex;
       align-items: center;
+      display: none;
+
+      @include media-breakpoint-up(sm) {
+        display: flex;
+      }
 
       img {
         position: absolute;
-        width: 20rem;
+        width: 10rem;
+
+        @include media-breakpoint-up(lg) {
+          width: 20rem;
+        }
 
         &:first-of-type {
           left: 0;
@@ -611,12 +777,16 @@ span.highlight {
         }
 
         &:last-of-type {
-          left: -2rem;
+          left: -1rem;
           z-index: 0;
           opacity: 0.2;
           blur: 8px;
           filter: blur(8px);
           -webkit-filter: blur(2px);
+
+          @include media-breakpoint-up(lg) {
+            left: -2rem;
+          }
         }
       }
     }
@@ -627,12 +797,39 @@ span.highlight {
     background-color: $beige;
     padding: 10rem 0;
 
-    h2 {
+    &__top {
       font-size: 5rem;
       margin: 0;
       padding: 0;
       font-weight: 900;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+
+      @include media-breakpoint-up(md) {
+        flex-direction: row;
+        justify-content: center;
+        line-height: 1.5;
+      }
+      
+      .dropdown__container {
+        span {
+          font-size: 5rem !important;
+        }
+        
+        &__active {
+          padding: 0 1rem !important;
+
+          @include media-breakpoint-up(md) {
+            padding: 0 2rem 0 1rem !important;
+          }
+          
+          svg {
+            margin: 0 0 0.8rem 0.3rem !important;
+          }
+        }
+      }
     }
 
     &-inner {
@@ -688,9 +885,14 @@ span.highlight {
 
       &__filters {
         display: flex;
+        flex-direction: column;
         justify-content: space-around;
         padding: 5rem 0 0.5rem 0;
         align-items: center;
+
+        @include media-breakpoint-up(md) {
+          flex-direction: row;
+        }
 
         &__filter {
           color: $green-dark-fade;
@@ -708,6 +910,42 @@ span.highlight {
         td,
         th {
           padding: 1rem 0;
+        }
+
+        &.session {
+          td,
+          th {
+            @media screen and (max-width: 575px) {
+              &:nth-child(2),
+              &:nth-child(4) {
+                display: none;
+              }
+            }
+            @media screen and (max-width: 991px) {
+              &:nth-child(6),
+              &:nth-child(7),
+              &:nth-child(9) {
+                display: none;
+              }
+            }
+          }
+        }
+
+        &.total {
+          td,
+          th {
+            @media screen and (max-width: 575px) {
+              &:nth-child(6) {
+                display: none;
+              }
+            }
+            @media screen and (max-width: 767px) {
+              &:nth-child(4),
+              &:nth-child(7) {
+                display: none;
+              }
+            }
+          }
         }
 
         tbody {
@@ -732,12 +970,15 @@ span.highlight {
 
   &-about {
     color: $beige;
-    padding: 10rem 0;
     position: relative;
-    
-    &__bg {
-      position: absolute;
-      top: -10rem;
+    height: 100vh;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include media-breakpoint-up(md) {
+      background-position: center;
     }
     
     &__from {
@@ -748,6 +989,7 @@ span.highlight {
       left: 0;
       right: 0;
       cursor: default;
+      color: $green-dark;
       
       img {
         width: 1rem;

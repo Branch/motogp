@@ -573,7 +573,7 @@ function Results(props) {
 
     return <div className={'index-main-results'} ref={props.refProp}>
         <div className={'index-main-results-inner container'}>
-            <h2>
+            <div className={'index-main-results__top'}>
                 <Dropdown
                     class = {'numbers'}
                     activeItem={activeYear.year}
@@ -582,7 +582,7 @@ function Results(props) {
                     isOpen={activeYear.dropdownOpen}
                 />
                 results
-            </h2>
+            </div>
             <div className={'index-main-results-inner__filters'}>
                 <div className={'index-main-results-inner__filters__filter active'}>
                     {loadingRaces === true &&
@@ -660,7 +660,7 @@ function Results(props) {
                 </button>
             }
             <Fade in={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type}>
-                <div className={'loaded-view-info'}>
+                <div className={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type ? 'loaded-view-info active' : 'loaded-view-info'}>
                     <Fade in={button.loading}>
                         <div className={'loaded-view-info__blur'}></div>
                     </Fade>
@@ -705,7 +705,7 @@ function Results(props) {
                 </div>
             </Fade>
             {loadedSessionInfo.type === 'Total standings' && activeType.type === 'Total standings' && !error.status &&
-                <table>
+                <table className={'total'}>
                     <Fade in={button.loading}>
                         <div className={'loaded-view-info__blur'}></div>
                     </Fade>
@@ -715,7 +715,7 @@ function Results(props) {
                 </table>
             }
             {loadedSessionInfo.type === 'Session' && activeType.type === 'Session' && !error.status &&
-                <table>
+                <table className={'session'}>
                     <Fade in={button.loading}>
                         <div className={'loaded-view-info__blur'}></div>
                     </Fade>
