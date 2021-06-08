@@ -4,6 +4,8 @@ import ScrollTo from "../components/scrollTo";
 import Track from "../components/track";
 function Index(props) {
 
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://motogp-worker.herokuapp.com' : '';
+
     const [menuClass, setMenuClass] = useState('')
     const [firstOffset, setFirstOffset] = useState(0)
     const [showShareMenu, setShareMenuStatus] = useState(false)
@@ -38,7 +40,7 @@ function Index(props) {
     })
 
     const getLatestRace = async () => {
-        const results = await fetch(`/motogp/latest`);
+        const results = await fetch(`${apiUrl}/motogp/latest`);
         const data = await results.json()
         let html = window.document.createElement('html');
         html.innerHTML = data.data

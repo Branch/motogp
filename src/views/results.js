@@ -7,6 +7,8 @@ import Country from '../helpers/country';
 
 function Results(props) {
 
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://motogp-worker.herokuapp.com' : '';
+
     const [activeYear, assignYear] = useState({
         year: new Date().getFullYear(),
         dropdownOpen: false
@@ -119,7 +121,7 @@ function Results(props) {
     const fetchResults = async () => {
         assignButtonStatus({clicked: true, loading: true, disabled: true})
 
-        fetch(`/motogp/standings?` + new URLSearchParams({
+        fetch(`${apiUrl}/motogp/standings?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
             category: activeCategory.category,
@@ -211,7 +213,7 @@ function Results(props) {
 
     const fetchSession = async () => {
         assignButtonStatus({clicked: true, loading: true, disabled: true})
-        const results = await fetch(`/motogp/session?` + new URLSearchParams({
+        const results = await fetch(`${apiUrl}/motogp/session?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
             category: activeCategory.category,
@@ -361,7 +363,7 @@ function Results(props) {
 
     const fetchSessions = async () => {
         setLoadingSessions(true);
-        const results = await fetch(`/motogp/sessions?` + new URLSearchParams({
+        const results = await fetch(`${apiUrl}/motogp/sessions?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race,
             category: activeCategory.category,
@@ -401,7 +403,7 @@ function Results(props) {
 
     const fetchCategories = async () => {
         setLoadingCategories(true);
-        const results = await fetch(`/motogp/categories?` + new URLSearchParams({
+        const results = await fetch(`${apiUrl}/motogp/categories?` + new URLSearchParams({
             year: activeYear.year,
             race: activeRace.race
         }))
@@ -455,7 +457,7 @@ function Results(props) {
 
             setLoadingRaces(true)
 
-            const results = await fetch(`/motogp/races?` + new URLSearchParams({
+            const results = await fetch(`${apiUrl}/motogp/races?` + new URLSearchParams({
                 year: activeYear.year
             }))
             const data = await results.json();
@@ -492,7 +494,7 @@ function Results(props) {
 
         }
         fetchRaces();
-    }, [activeYear.year])
+    }, [activeYear.year, apiUrl])
 
     useEffect(() => {
         if(activeRace.race !== undefined && activeRace.race !== '') {
