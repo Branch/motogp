@@ -89,7 +89,7 @@ function Index(props) {
 
 
     return <div className={'index-main'} ref={props.refProp}>
-        <img className={'mobile-bg'} src={Bg} />
+        <img alt={'mobile background'} className={'mobile-bg'} src={Bg} />
         <button onClick={props.openSidebar} className={"hamburger"} type="button">
                 <span className="hamburger-box">
                     <span className="hamburger-inner"></span>
