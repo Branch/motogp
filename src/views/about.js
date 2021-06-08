@@ -1,9 +1,9 @@
 import React from 'react';
 import Background from '../assets/images/about-bg.svg';
 
-function About() {
+function About(props) {
 
-    return <div className={'index-main-about'}>
+    return <div className={'index-main-about'} ref={props.refProp}>
         <img className={'index-main-about__bg'} alt={'background'} src={Background} />
         <div className={'index-main-about-inner container'}>
             <h2 className={""}>

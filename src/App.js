@@ -1,24 +1,62 @@
 // Import necessary dependencies
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import Main from './views/main';
 import Results from './views/results';
 import About from './views/about';
+import Sidebar from './components/sidebar';
 // Create App component
 function App() {
 
-    const myRef = useRef(null);
-    const executeScroll = () => myRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
+    const startRef = useRef(null);
+    const resultsRef = useRef(null);
+    const aboutRef = useRef(null);
+    const scrollToStart = () => {
+        sidebarToggler();
+        startRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
+    }
+    const scrollToResults = (toggleMenu) => {
+        if(toggleMenu) {
+            sidebarToggler();
+        }
+        resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
+    }
+
+    const scrollToResults2 = () => {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
+    }
+    const scrollToAbout = () => {
+        sidebarToggler();
+        aboutRef.current.scrollIntoView({ behavior: 'smooth', block: 'end'});
+    }
+
+    const [sidebarOpen, toggleSidebar] = useState(false)
+
+    const sidebarToggler = () => {
+        toggleSidebar(!sidebarOpen)
+    }
 
 
     return (
         <div className="app">
+            <div className={sidebarOpen ? 'overlay active' : 'overlay'}></div>
+            <Sidebar
+                onClose={sidebarToggler}
+                active={sidebarOpen ? 'active' : ''}
+                startScroll={scrollToStart}
+                resultScroll={scrollToResults}
+                aboutScroll={scrollToAbout}
+            />
             <Main
-                scroll={executeScroll}
+                openSidebar={sidebarToggler}
+                refProp={startRef}
+                scroll={scrollToResults2}
             />
             <Results
-                refProp={myRef}
+                refProp={resultsRef}
             />
-            <About />
+            <About
+                refProp={aboutRef}
+            />
         </div>
     )
 }
