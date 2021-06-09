@@ -4,6 +4,7 @@ import Main from './views/main';
 import Results from './views/results';
 import About from './views/about';
 import Sidebar from './components/sidebar';
+import GoToTop from './components/goToTop';
 // Create App component
 function App() {
 
@@ -11,7 +12,6 @@ function App() {
     const resultsRef = useRef(null);
     const aboutRef = useRef(null);
     const scrollToStart = () => {
-        sidebarToggler();
         startRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
     }
     const scrollToResults = (toggleMenu) => {
@@ -30,19 +30,32 @@ function App() {
     }
 
     const [sidebarOpen, toggleSidebar] = useState(false)
+    const [showGoToTop, toggleGoToTop] = useState(false)
 
     const sidebarToggler = () => {
         toggleSidebar(!sidebarOpen)
     }
 
+    const handleScroll = () => {
+        if(window.pageYOffset >= 695) {
+            toggleGoToTop(true);
+        } else {
+            toggleGoToTop(false);
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll)
 
     return (
         <div className="app">
+            <GoToTop
+                show={showGoToTop}
+                onClick={scrollToStart}
+            />
             <div className={sidebarOpen ? 'overlay active' : 'overlay'}></div>
             <Sidebar
                 onClose={sidebarToggler}
                 active={sidebarOpen ? 'active' : ''}
-                startScroll={scrollToStart}
                 resultScroll={scrollToResults}
                 aboutScroll={scrollToAbout}
             />

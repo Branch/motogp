@@ -6,7 +6,6 @@ const Sidebar = (props) => {
     return <div className={`sidebar ${props.active}`}>
         <button onClick={props.onClose}><FontAwesomeIcon icon={faTimes} /></button>
         <ul>
-            <li onClick={props.startScroll}>Top</li>
             <li onClick={props.resultScroll}>Results</li>
             <li onClick={props.aboutScroll}>About</li>
         </ul>

@@ -20,7 +20,6 @@ function Index(props) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log(firstOffset)
             if(firstOffset < 100) {
                 setFirstOffset(firstOffset + 1)
             }

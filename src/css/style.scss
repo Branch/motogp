@@ -53,6 +53,34 @@ h6,
   }
 }
 
+.to-top {
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  right: 2rem;
+  background-color: $orange;
+  bottom: 2rem;
+  z-index: 4;
+  border-radius: 3rem;
+  font-size: 2rem;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  display: flex;
+  opacity: 0;
+  transition: all 0.2s linear;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 2px 4px;
+
+  &.active {
+    opacity: 1;
+    transition: all 0.2s linear;
+
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+  }
+}
+
 .sidebar {
   background-color: $orange;
   color: #fff;
@@ -82,6 +110,7 @@ h6,
 
     @include media-breakpoint-up(sm) {
       width: 60vw;
+      display: block;
     }
 
     @include media-breakpoint-up(md) {
@@ -96,9 +125,27 @@ h6,
       position: fixed;
       font-size: 2rem;
       font-weight: bold;
-      margin-top: 3rem;
       list-style: none;
-      display: block;
+
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      
+      @include media-breakpoint-up(sm) {
+        width: auto;
+        display: block;
+        margin-top: 3rem;
+        padding: 0 0 0 3rem;
+      }
+
+      @include media-breakpoint-up(md) {
+        margin-top: 5rem;
+      }
     }
 
     button {
@@ -111,11 +158,7 @@ h6,
       font-size: 2rem;
       top: 1rem;
       right: 1rem;
-
-      @include media-breakpoint-up(md) {
-        top: 3rem;
-        right: 3rem;
-      }
+      z-index: 1;
 
       i {
         text-decoration: none;
