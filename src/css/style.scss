@@ -305,6 +305,17 @@ h6,
       height: 0;
       position: absolute;
       overflow: hidden;
+      width: 280px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+
+      @include media-breakpoint-up(md) {
+        width: auto;
+        left: unset;
+        right: unset;
+        margin: unset;
+      }
 
       div {
         cursor: pointer;
@@ -320,23 +331,26 @@ h6,
 
         div {
           text-align: left;
-          transition: all 0.2s linear;
+          transition: color 0.2s linear;
           color: $green-dark;
           font-weight: bold;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid $green-dark-faded;
+          text-align: center;
+
+          @include media-breakpoint-up(md) {
+            text-align: left;
+          }
+          
+          &:last-of-type {
+            border: none;
+          }
 
           &:hover {
-            transition: all 0.2s linear;
+            transition: color 0.2s linear;
             color: $orange;
           }
         }
-      }
-    }
-    
-    &__races {
-      width: 280px;
-
-      @include media-breakpoint-up(md) {
-        width: auto;
       }
     }
     
@@ -891,6 +905,7 @@ span.highlight {
         display: flex;
         justify-content: center;
         align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.3) 0 2px 4px;
 
         img,
         span {
@@ -969,6 +984,27 @@ span.highlight {
               &:nth-child(7),
               &:nth-child(9) {
                 display: none;
+              }
+            }
+          }
+
+          &.RACE,
+          &.RAC2 {
+            td,
+            th {
+              display: table-cell !important;
+              @media screen and (max-width: 575px) {
+                &:nth-child(1),
+                &:nth-child(5) {
+                  display: none !important;
+                }
+              }
+              @media screen and (max-width: 991px) {
+                &:nth-child(3),
+                &:nth-child(8),
+                &:nth-child(7) {
+                  display: none !important;
+                }
               }
             }
           }

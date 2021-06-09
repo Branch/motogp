@@ -70,7 +70,8 @@ function Results(props) {
     const [loadedSessionInfo, assignLoadedSessionInfo] = useState({
         text: '',
         visible: false,
-        type: ''
+        type: '',
+        session: '',
     })
 
     const [loadingRaces, setLoadingRaces] = useState(false)
@@ -93,7 +94,7 @@ function Results(props) {
         if(activeType.type === 'Session') {
             text = `${activeCategory.category} ${activeSession.session} of the ${activeRace.raceName}`;
         }
-        assignLoadedSessionInfo({text: text, visible: true, type: activeType.type})
+        assignLoadedSessionInfo({text: text, visible: true, type: activeType.type, session: activeSession.session})
     }
 
     const yearClick = async (year) => {
@@ -715,7 +716,7 @@ function Results(props) {
                 </table>
             }
             {loadedSessionInfo.type === 'Session' && activeType.type === 'Session' && !error.status &&
-                <table className={'session'}>
+                <table className={'session ' + loadedSessionInfo.session}>
                     <Fade in={button.loading}>
                         <div className={'loaded-view-info__blur'}></div>
                     </Fade>
