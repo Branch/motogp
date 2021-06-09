@@ -6,7 +6,7 @@ import About from './views/about';
 import Sidebar from './components/sidebar';
 import GoToTop from './components/goToTop';
 import ReactGA from 'react-ga';
-ReactGA.initialize('G-3Y785Z7THC');
+ReactGA.initialize('275249294');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 // Create App component
