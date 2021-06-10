@@ -16,7 +16,7 @@ function About(props) {
             </p>
         </div>
         <div className={'index-main-about-links container'}>
-            <a href={"mailto:contact@domain.se"}><i className="fas fa-envelope"></i></a>
+            <a href={"mailto:contact@gpresults.info"}><i className="fas fa-envelope"></i></a>
         </div>
         <div className={'index-main-about__from'}>Made in <img alt={'sweden'} src='https://cdn.jsdelivr.net/gh/hampusborgos/country-flags@main/svg/se.svg'/></div>
     </div>
