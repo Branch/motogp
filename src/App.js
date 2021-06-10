@@ -6,6 +6,13 @@ import About from './views/about';
 import Sidebar from './components/sidebar';
 import GoToTop from './components/goToTop';
 import ReactGA from 'react-ga';
+import TagManager from 'react-gtm-module'
+
+const tagManagerArgs = {
+    gtmId: 'GTM-MTMK5N2'
+}
+
+TagManager.initialize(tagManagerArgs)
 ReactGA.initialize('UA-129307485-2');
 ReactGA.pageview(window.location.pathname + window.location.search);
 

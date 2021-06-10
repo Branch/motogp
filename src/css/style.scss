@@ -524,30 +524,47 @@ span.highlight {
 
     &__links {
       position: absolute;
-      width: 0;
-      height: 70px;
       background-color: $beige-light;
       border-radius: 2rem;
-      top: -1rem;
-      left: -1rem;
       opacity: 0;
       transition: all 0.1s linear;
       display: flex;
       justify-content: space-evenly;
       box-shadow: rgba(0, 0, 0, 0.18) 0 2px 4px;
+      height: 0;
+      left: -0.8rem;
+      bottom: 3rem;
+      flex-direction: column;
+      width: 4rem;
+
+      @include media-breakpoint-up(sm) {
+        left: -1rem;
+        width: 0;
+        height: 70px;
+        top: -1rem;
+        flex-direction: row;
+      }
       
       &::before {
         content: "";
         width: 0;
         height: 0;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        border-right: 10px solid $beige-light;
+        border-top: 10px solid $beige-light;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
         position: absolute;
-        left: -9px;
-        top: 0;
-        bottom: 0;
         margin: auto;
+        top: unset;
+        bottom: -8px;
+        left: 22px;
+
+        @include media-breakpoint-up(sm) {
+          border-top: 10px solid transparent;
+          border-bottom: 10px solid transparent;
+          border-right: 10px solid $beige-light;
+          top: -4px;
+          left: -18px;
+        }
       }
 
       button {
@@ -591,9 +608,17 @@ span.highlight {
 
       .app-share__links {
         transition: all 0.1s linear;
-        left: 4rem;
-        width: 300px;
+        left: -0.8rem;
         opacity: 1;
+        height: 300px;
+        bottom: 3rem;
+        width: 4rem;
+        
+        @include media-breakpoint-up(md) {
+          width: 300px;
+          height: 4rem;
+          left: 4rem;
+        }
       }
     }
   }

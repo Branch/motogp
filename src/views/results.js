@@ -655,9 +655,9 @@ function Results(props) {
                 </div>
             </Fade>
             {!error.status &&
-                <button onClick={buttonClick} disabled={button.disabled} className={button.loading === true ? 'loading' : ''}>
+                <button id={'fetch-races'} onClick={buttonClick} disabled={button.disabled} className={button.loading === true ? 'loading' : ''}>
                     <img alt={'loader'} className={'loader'} src={Loader} />
-                    <span>Go</span>
+                    <span id={'fetch-races-text'}>Go</span>
                 </button>
             }
             <Fade in={categoriesInFilter.length > 0 && activeType.type === loadedSessionInfo.type}>
