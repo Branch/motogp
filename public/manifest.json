@@ -1,21 +1,11 @@
 {
   "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Motogp results app",
   "icons": [
     {
       "src": "favicon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "32x32",
       "type": "image/png"
-    },
-    {
-      "src": "favicon.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "favicon.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ],
   "start_url": ".",
